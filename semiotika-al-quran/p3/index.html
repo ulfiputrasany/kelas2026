@@ -1,22 +1,1233 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Semiotika Al-Qur'an — Pertemuan 3</title>
-<style>
-  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background:#f4f6f5; color:#12281F; margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
-  .card { background:#fff; border-radius:16px; padding:48px 40px; max-width:480px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
-  .tag { display:inline-block; background:#E8F1EC; color:#1F6F54; font-size:13px; font-weight:600; padding:4px 12px; border-radius:999px; margin-bottom:16px; }
-  h1 { font-size:22px; margin:0 0 8px; color:#0B3D2E; }
-  p { color:#5A6B63; font-size:15px; line-height:1.6; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semiotika Al-Qur'an - Pertemuan 3: Peirce I, Tanda Triadik | UIN Salatiga</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-locked { opacity: 0.45; pointer-events: none; cursor: not-allowed; }
+        .tab-active { border-bottom: 3px solid #059669 !important; color: #059669 !important; font-weight: 700 !important; background-color: #ecfdf5; }
+        @media print { .no-print { display: none !important; } }
+    </style>
 </head>
-<body>
-  <div class="card">
-    <span class="tag">Pertemuan 3</span>
-    <h1>Semiotika Al-Qur'an</h1>
-    <p>Materi untuk pertemuan ini sedang disiapkan. Silakan kembali lagi nanti.</p>
-  </div>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Branding Bar -->
+    <header class="bg-emerald-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-200">Prodi Ilmu Al-Qur'an dan Tafsir • UIN Salatiga</span>
+                <h1 class="text-xl sm:text-2xl font-bold">Semiotika Al-Qur'an — Pertemuan 3</h1>
+                <p class="text-xs text-emerald-100">Peirce I: Tanda Triadik (Representamen, Objek, Interpretan)</p>
+            </div>
+            <div id="student-badge" class="hidden bg-emerald-900/80 border border-emerald-600 rounded-lg px-3 py-1.5 text-right text-xs">
+                <p class="font-semibold text-emerald-100" id="badge-name">-</p>
+                <p class="text-emerald-300"><span id="badge-class">-</span> | NIM: <span id="badge-nim">-</span></p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Stepper Tabs (5 Steps - Flexible Switching for Unlocked Tabs) -->
+    <nav class="bg-white border-b border-slate-200 shadow-sm sticky top-[72px] z-40 overflow-x-auto">
+        <div class="max-w-6xl mx-auto flex justify-between min-w-[640px] px-4">
+            <button type="button" onclick="switchTab(1)" id="tab-1" class="tab-active py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent transition-colors cursor-pointer">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs font-bold" id="num-1">1</span> Identitas
+            </button>
+            <button type="button" onclick="switchTab(2)" id="tab-2" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-2">2</span> Materi Tertulis
+            </button>
+            <button type="button" onclick="switchTab(3)" id="tab-3" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-3">3</span> Kuis MCQ
+            </button>
+            <button type="button" onclick="switchTab(4)" id="tab-4" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-4">4</span> Tugas Esai
+            </button>
+            <button type="button" onclick="switchTab(5)" id="tab-5" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-5">5</span> Laporan PDF
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-8 flex-grow">
+
+        <!-- SECTION 1: Student Identity Gate -->
+        <section id="section-1" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+            <div class="max-w-md mx-auto">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Registrasi Mahasiswa</h2>
+                    <p class="text-slate-600 text-sm mt-1">Isi data diri lengkap sebelum memulai perkuliahan interaktif Semiotika Al-Qur'an.</p>
+                </div>
+                <form id="form-identity" onsubmit="submitIdentity(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+                        <input type="text" id="input-nama" required placeholder="Contoh: Ahmad Fauzi" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Kelas</label>
+                        <select id="input-kelas" required class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                            <option value="">-- Pilih Kelas --</option>
+                            <option value="A">Kelas A</option>
+                            <option value="B">Kelas B</option>
+                            <option value="C">Kelas C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">NIM (Nomor Induk Mahasiswa)</label>
+                        <input type="text" id="input-nim" required placeholder="Contoh: 1012023001" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-3 rounded-lg shadow-md transition duration-200 flex items-center justify-center gap-2">
+                        <span>Buka Materi Perkuliahan</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Complete Written Materials (Converted from Transcript & Full Syllabus, No Video) -->
+        <section id="section-2" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Materi Tertulis Perkuliahan • Pertemuan 3</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Peirce I: Tanda Triadik</h2>
+                    <p class="text-sm text-slate-600">Mata Kuliah Semiotika Al-Qur'an • Prodi Ilmu Al-Qur'an dan Tafsir, UIN Salatiga</p>
+                </div>
+
+                <!-- Ikhtisar Alur Materi (Hasil Konversi Transkrip ke Materi Tertulis) -->
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-8 space-y-3 text-sm text-slate-700">
+                    <h3 class="text-base font-bold text-emerald-900 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open text-emerald-700"></i>
+                        <span>Ikhtisar Alur Pembahasan</span>
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                            <span class="font-bold text-emerald-800 block mb-1">1. Model Diadik ke Tanda Triadik</span>
+                            <p class="text-xs leading-relaxed">Perluasan kajian dari sistem bahasa Saussure menuju logika representasi Peirce: relasi tak terpisahkan antara <strong>Representamen</strong>, <strong>Objek</strong>, dan <strong>Interpretan</strong>.</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                            <span class="font-bold text-emerald-800 block mb-1">2. Interpretan & Relasi Objek</span>
+                            <p class="text-xs leading-relaxed">Pemahaman bahwa interpretan adalah efek kognitif/tindakan (benih semiosis), pembedaan <strong>objek segera vs dinamis</strong>, serta relasi <strong>Ikon</strong>, <strong>Indeks</strong>, dan <strong>Simbol</strong>.</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+                            <span class="font-bold text-emerald-800 block mb-1">3. Tanda Campuran & Kajian Al-Qur'an</span>
+                            <p class="text-xs leading-relaxed">Klasifikasi berdasarkan relasi dominan dalam konteks nyata serta relevansi analitis kerangka triadik Peirce dalam menelaah penafsiran Al-Qur'an.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prose max-w-none text-slate-800 space-y-8 leading-relaxed">
+
+                    <!-- 1. Dari Saussure ke Peirce -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">1. Dari Saussure ke Peirce</h3>
+                        <p class="mb-3">Pada Pertemuan 2 kita mempelajari tanda menurut Saussure: pasangan penanda dan petanda, keduanya bersifat mental, dihubungkan oleh konvensi, dan memperoleh nilainya dari perbedaan dalam sistem bahasa. Model itu sangat kuat untuk menjelaskan bahasa, tetapi ia sengaja mengesampingkan dua hal: dunia di luar bahasa, dan proses penafsiran yang dilakukan manusia saat membaca tanda.</p>
+                        <p class="mb-4">Charles Sanders Peirce (1839 sampai 1914), logikawan dan filsuf Amerika, memulai dari pertanyaan yang lebih luas. Ia tidak bertanya "bagaimana bahasa bekerja?", melainkan "bagaimana sesuatu dapat mewakili sesuatu yang lain bagi seseorang?" Asap mewakili api, jejak kaki mewakili orang yang lewat, kata mewakili gagasan, gambar mewakili tempat. Karena pertanyaannya lebih luas, modelnya mencakup bahasa sekaligus tanda-tanda non-bahasa. Peirce menyebut ilmu tentang hal ini semiotik, dan ia memandangnya sebagai bagian dari logika.</p>
+
+                        <div class="bg-emerald-50 border-l-4 border-emerald-600 p-4 rounded-r-lg text-sm">
+                            <p class="font-bold text-emerald-900 mb-1">Renungan. Dalam model Saussure, di mana posisi dunia di luar bahasa?</p>
+                            <p class="text-emerald-950"><strong>Jawaban:</strong> dikesampingkan. Saussure mengurung kajian di dalam sistem tanda. Peirce menempatkan objek di dalam relasi tanda itu sendiri, sehingga dunia ikut hadir dalam model.</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Tanda sebagai relasi tiga unsur -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">2. Tanda sebagai relasi tiga unsur</h3>
+                        <p class="mb-4">Bagi Peirce, tanda tidak pernah berupa pasangan. Tanda adalah relasi tiga unsur yang tidak dapat dipisahkan.</p>
+
+                        <!-- Visual Triangle Diagram (Strictly Preserved ASCII Triangle Alignment) -->
+                        <div class="bg-slate-900 text-emerald-300 font-mono text-xs sm:text-sm p-5 rounded-xl my-4 overflow-x-auto flex justify-center shadow-inner">
+<pre class="leading-snug text-left inline-block">
+               INTERPRETAN
+           (efek pada penafsir)
+                    /\
+                   /  \
+                  /    \
+                 /      \
+                /        \
+               /          \
+  REPRESENTAMEN ------------ OBJEK
+ (yang mewakili)          (yang diwakili)
+</pre>
+                        </div>
+
+                        <!-- Table of Triad Terms -->
+                        <div class="overflow-x-auto my-4">
+                            <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                                <thead class="bg-slate-100 text-slate-800 font-semibold border-b border-slate-300">
+                                    <tr>
+                                        <th class="p-3 border border-slate-300">Istilah</th>
+                                        <th class="p-3 border border-slate-300">Pengertian</th>
+                                        <th class="p-3 border border-slate-300">Contoh: asap di kejauhan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-bold text-emerald-800">Representamen</td>
+                                        <td class="p-3 border border-slate-300">Hal yang mewakili sesuatu. Sering disebut wahana tanda.</td>
+                                        <td class="p-3 border border-slate-300">Asap yang membumbung</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50">
+                                        <td class="p-3 border border-slate-300 font-bold text-emerald-800">Objek</td>
+                                        <td class="p-3 border border-slate-300">Apa yang diwakili oleh tanda.</td>
+                                        <td class="p-3 border border-slate-300">Api (kebakaran)</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-bold text-emerald-800">Interpretan</td>
+                                        <td class="p-3 border border-slate-300">Efek yang ditimbulkan tanda: pemahaman atau tanda lanjutan dalam benak penafsir.</td>
+                                        <td class="p-3 border border-slate-300">Kesimpulan "ada yang terbakar", lalu keputusan menelepon pemadam</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="font-semibold text-slate-900 mt-4 mb-2">Tiga hal perlu diingat sejak awal:</p>
+                        <ol class="list-decimal list-inside space-y-2 text-sm sm:text-base pl-1">
+                            <li>Ketiganya saling bergantung. Tanpa objek, tidak ada yang diwakili. Tanpa representamen, tidak ada yang mewakili. Tanpa interpretan, tidak ada yang memahami tanda sebagai tanda. Sesuatu baru menjadi tanda ketika ketiganya bekerja.</li>
+                            <li>Kata "tanda" dalam arti sehari-hari sering hanya menunjuk representamen. Dalam kuliah ini, kata "tanda" menunjuk seluruh relasi tiga unsur, dan kata "representamen" dipakai untuk wahananya.</li>
+                            <li>Representamen bukan penanda Saussure. Penanda Saussure adalah citra bunyi yang bersifat psikis. Representamen Peirce bisa berupa benda, peristiwa, gambar, kata, atau apa saja yang berfungsi mewakili.</li>
+                        </ol>
+                    </div>
+
+                    <!-- 3. Interpretan -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">3. Interpretan: unsur yang paling sering disalahpahami</h3>
+                        <p class="mb-3">Kekeliruan yang paling umum adalah menganggap interpretan sebagai orang yang menafsirkan. Bukan. Interpretan adalah efek yang timbul: sebuah pemahaman, kesimpulan, perasaan, atau tindakan yang dipicu tanda.</p>
+                        <p class="mb-3">Perhatikan pengendara motor yang melihat awan gelap. Interpretannya bukan si pengendara, melainkan pemahaman "sebentar lagi hujan" yang timbul dalam dirinya, dan keputusan berhenti memakai jas hujan yang menyusul.</p>
+                        <p class="mb-3">Interpretan sendiri adalah sebuah tanda, sehingga ia dapat memunculkan interpretan berikutnya, dan seterusnya:</p>
+
+                        <div class="bg-slate-100 border border-slate-300 rounded-lg p-4 my-3 font-mono text-xs sm:text-sm overflow-x-auto text-slate-800">
+<pre class="leading-relaxed">
+Awan gelap  ->  "akan hujan"  ->  "jemuran harus diangkat"  ->  tindakan mengangkat jemuran
+(tanda)         (interpretan 1,   (interpretan 2,                 (interpretan 3)
+                 sekaligus         sekaligus tanda baru)
+                 tanda baru)
+</pre>
+                        </div>
+
+                        <p>Dengan demikian makna, bagi Peirce, bukan benda yang tersimpan dalam kata, melainkan proses yang terus bergulir. Inilah benih gagasan semiosis tak terbatas yang akan kita bahas pada pertemuan berikutnya.</p>
+                    </div>
+
+                    <!-- 4. Objek segera dan objek dinamis -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">4. Objek segera dan objek dinamis</h3>
+                        <p class="mb-2">Peirce membedakan dua cara melihat objek:</p>
+                        <ul class="list-disc list-inside space-y-1.5 pl-2 mb-3">
+                            <li><strong>Objek segera:</strong> objek sebagaimana disajikan oleh tanda.</li>
+                            <li><strong>Objek dinamis:</strong> objek sebagaimana sebenarnya adanya, yang tidak sepenuhnya tertangkap tanda.</li>
+                        </ul>
+                        <p>Pembedaan ini berguna ketika tanda menyajikan objek secara kurang tepat. Foto profil yang disunting berlebihan menyajikan seseorang dengan cara tertentu (objek segera), sementara orangnya sendiri tentu lebih rumit daripada fotonya (objek dinamis). Selisih antara keduanya adalah ruang bagi salah paham, kebohongan, dan juga bagi penyelidikan lebih lanjut.</p>
+                    </div>
+
+                    <!-- 5. Tiga cara tanda berhubungan dengan objeknya -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">5. Tiga cara tanda berhubungan dengan objeknya</h3>
+                        <p class="mb-4">Peirce kemudian bertanya: bagaimana representamen terhubung dengan objeknya? Ia memberi tiga jawaban.</p>
+
+                        <div class="space-y-4 mb-5">
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-slate-900 text-base mb-1">5.1 Ikon: hubungan lewat kemiripan</h4>
+                                <p class="text-sm mb-2">Ikon mewakili objek karena berbagi sifat dengannya. Ikon bekerja meskipun objeknya tidak ada di tempat.</p>
+                                <p class="text-sm text-slate-700"><strong>Contoh:</strong> potret, peta, denah rumah, diagram, gambar amplop pada aplikasi surel, rekaman suara.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-slate-900 text-base mb-1">5.2 Indeks: hubungan lewat keterkaitan nyata</h4>
+                                <p class="text-sm mb-2">Indeks mewakili objek karena terhubung secara nyata dengannya, biasanya sebab-akibat atau kedekatan fisik. Indeks tidak perlu mirip dengan objeknya dan tidak memerlukan kesepakatan siapa pun. Hubungannya ada di dunia.</p>
+                                <p class="text-sm text-slate-700"><strong>Contoh:</strong> asap untuk api, jejak kaki basah untuk orang yang baru lewat, demam untuk penyakit, penunjuk arah angin untuk arah angin, jari yang menunjuk.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-slate-900 text-base mb-1">5.3 Simbol: hubungan lewat konvensi</h4>
+                                <p class="text-sm mb-2">Simbol mewakili objek karena kebiasaan atau kesepakatan komunitas penggunanya. Tidak ada kemiripan, tidak ada hubungan fisik. Tanpa belajar, orang tidak dapat memahaminya.</p>
+                                <p class="text-sm text-slate-700"><strong>Contoh:</strong> sebagian besar kata, bendera Merah Putih, angka, lampu lalu lintas, lambang matematika.</p>
+                            </div>
+                        </div>
+
+                        <!-- Comparison Table: Ikon, Indeks, Simbol -->
+                        <div class="overflow-x-auto my-4">
+                            <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                                <thead class="bg-slate-100 text-slate-800 font-semibold border-b border-slate-300">
+                                    <tr>
+                                        <th class="p-3 border border-slate-300">Aspek</th>
+                                        <th class="p-3 border border-slate-300">Ikon</th>
+                                        <th class="p-3 border border-slate-300">Indeks</th>
+                                        <th class="p-3 border border-slate-300">Simbol</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-medium">Dasar relasi</td>
+                                        <td class="p-3 border border-slate-300">Kemiripan</td>
+                                        <td class="p-3 border border-slate-300">Keterkaitan nyata (sebab-akibat, kedekatan)</td>
+                                        <td class="p-3 border border-slate-300">Konvensi, kebiasaan</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50">
+                                        <td class="p-3 border border-slate-300 font-medium">Perlu dipelajari?</td>
+                                        <td class="p-3 border border-slate-300">Sebagian kecil</td>
+                                        <td class="p-3 border border-slate-300">Tidak selalu</td>
+                                        <td class="p-3 border border-slate-300">Ya</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-medium">Perlu objek hadir?</td>
+                                        <td class="p-3 border border-slate-300">Tidak</td>
+                                        <td class="p-3 border border-slate-300">Ya, hubungan itu nyata</td>
+                                        <td class="p-3 border border-slate-300">Tidak</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50">
+                                        <td class="p-3 border border-slate-300 font-medium">Contoh</td>
+                                        <td class="p-3 border border-slate-300">Peta</td>
+                                        <td class="p-3 border border-slate-300">Asap</td>
+                                        <td class="p-3 border border-slate-300">Kata "meja"</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg text-sm">
+                            <p class="font-bold text-amber-900 mb-1">Tips membaca. Tanyakan: "apa yang membuat tanda ini bekerja?"</p>
+                            <ul class="list-disc list-inside text-amber-950 space-y-1">
+                                <li>Jawaban "karena mirip" mengarah ke <strong>ikon</strong>.</li>
+                                <li>Jawaban "karena terhubung secara nyata" mengarah ke <strong>indeks</strong>.</li>
+                                <li>Jawaban "karena orang sepakat memakainya begitu" mengarah ke <strong>simbol</strong>.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 6. Dua peringatan penting -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">6. Dua peringatan penting</h3>
+                        <p class="mb-3"><strong>Pertama, ini klasifikasi relasi, bukan klasifikasi benda.</strong> Ikon, indeks, dan simbol bukan tiga kotak untuk tiga jenis barang. Satu benda yang sama dapat berfungsi berbeda tergantung konteks. Foto adalah ikon karena kemiripannya dengan objek, sekaligus indeks karena dihasilkan oleh proses fisik cahaya yang benar-benar mengenai objek itu. Jadi jangan bertanya "benda ini termasuk apa?", tetapi "dalam penggunaan ini, tanda ini bekerja lewat relasi apa?"</p>
+                        <p><strong>Kedua, tanda nyata umumnya campuran.</strong> Rambu lalu lintas siluet pejalan kaki memuat unsur ikon (siluet menyerupai orang berjalan) dan unsur simbol (warna, bentuk segitiga, penempatan di tepi jalan, yang harus dipelajari). Tugas analis bukan memaksa tanda masuk satu kotak, tetapi menentukan relasi mana yang dominan dalam konteks itu dan memberi alasannya.</p>
+                    </div>
+
+                    <!-- 7. Contoh kerja: tiga analisis lengkap -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">7. Contoh kerja: tiga analisis lengkap</h3>
+
+                        <!-- Contoh A -->
+                        <div class="mb-6">
+                            <h4 class="font-bold text-emerald-900 text-base mb-2">Contoh A: awan mendung (indeks)</h4>
+                            <div class="overflow-x-auto mb-2">
+                                <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                                    <thead class="bg-slate-100 text-slate-800 font-semibold">
+                                        <tr>
+                                            <th class="p-2.5 border border-slate-300 w-1/4">Unsur</th>
+                                            <th class="p-2.5 border border-slate-300">Isi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-2.5 border border-slate-300 font-medium">Representamen</td>
+                                            <td class="p-2.5 border border-slate-300">Awan gelap dan tebal yang menggantung di sore hari</td>
+                                        </tr>
+                                        <tr class="bg-slate-50">
+                                            <td class="p-2.5 border border-slate-300 font-medium">Objek</td>
+                                            <td class="p-2.5 border border-slate-300">Hujan yang akan turun</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2.5 border border-slate-300 font-medium">Interpretan</td>
+                                            <td class="p-2.5 border border-slate-300">Pada pengendara motor: pemahaman "sebentar lagi hujan", lalu keputusan berhenti memakai jas hujan</td>
+                                        </tr>
+                                        <tr class="bg-slate-50">
+                                            <td class="p-2.5 border border-slate-300 font-medium">Relasi dominan</td>
+                                            <td class="p-2.5 border border-slate-300">Indeks: ada hubungan fisik dan sebab-akibat antara awan tebal dan hujan</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-slate-700"><strong>Mengapa bukan ikon atau simbol?</strong> Awan tidak menyerupai hujan, dan hubungannya tidak ditetapkan oleh kesepakatan. Hubungan itu ada di alam. Interpretan yang berbeda dapat timbul pada penafsir lain: bagi petani, awan yang sama mungkin ditafsirkan sebagai kabar baik.</p>
+                        </div>
+
+                        <!-- Contoh B -->
+                        <div class="mb-6">
+                            <h4 class="font-bold text-emerald-900 text-base mb-2">Contoh B: rambu siluet pejalan kaki (campuran, simbol dominan)</h4>
+                            <div class="overflow-x-auto mb-2">
+                                <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                                    <thead class="bg-slate-100 text-slate-800 font-semibold">
+                                        <tr>
+                                            <th class="p-2.5 border border-slate-300 w-1/4">Unsur</th>
+                                            <th class="p-2.5 border border-slate-300">Isi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-2.5 border border-slate-300 font-medium">Representamen</td>
+                                            <td class="p-2.5 border border-slate-300">Rambu segitiga atau persegi dengan siluet orang berjalan</td>
+                                        </tr>
+                                        <tr class="bg-slate-50">
+                                            <td class="p-2.5 border border-slate-300 font-medium">Objek</td>
+                                            <td class="p-2.5 border border-slate-300">Tempat penyeberangan atau area pejalan kaki</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2.5 border border-slate-300 font-medium">Interpretan</td>
+                                            <td class="p-2.5 border border-slate-300">Pada pengemudi: kewaspadaan dan keputusan memperlambat laju</td>
+                                        </tr>
+                                        <tr class="bg-slate-50">
+                                            <td class="p-2.5 border border-slate-300 font-medium">Relasi</td>
+                                            <td class="p-2.5 border border-slate-300">Ikon (siluet menyerupai orang berjalan) dan simbol (warna, bentuk, posisi)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-slate-700"><strong>Mana yang dominan?</strong> Simbol. Seseorang yang belum pernah belajar aturan lalu lintas dapat mengenali siluet sebagai "gambar orang", tetapi tidak akan memahaminya sebagai perintah berhati-hati. Unsur ikonik membantu pengenalan cepat, sedangkan makna rambunya bertumpu pada konvensi.</p>
+                        </div>
+
+                        <!-- Contoh C -->
+                        <div>
+                            <h4 class="font-bold text-emerald-900 text-base mb-2">Contoh C: kata "macet" dalam pesan singkat (simbol)</h4>
+                            <p class="text-sm italic text-slate-600 mb-2">Pesan: "Aku telat, macet parah."</p>
+                            <div class="overflow-x-auto mb-2">
+                                <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                                    <thead class="bg-slate-100 text-slate-800 font-semibold">
+                                        <tr>
+                                            <th class="p-2.5 border border-slate-300 w-1/4">Unsur</th>
+                                            <th class="p-2.5 border border-slate-300">Isi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-2.5 border border-slate-300 font-medium">Representamen</td>
+                                            <td class="p-2.5 border border-slate-300">Kata "macet"</td>
+                                        </tr>
+                                        <tr class="bg-slate-50">
+                                            <td class="p-2.5 border border-slate-300 font-medium">Objek</td>
+                                            <td class="p-2.5 border border-slate-300">Kondisi lalu lintas yang tersendat</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2.5 border border-slate-300 font-medium">Interpretan</td>
+                                            <td class="p-2.5 border border-slate-300">Pada penerima pesan: maklum, atau keputusan memulai rapat tanpa menunggu</td>
+                                        </tr>
+                                        <tr class="bg-slate-50">
+                                            <td class="p-2.5 border border-slate-300 font-medium">Relasi dominan</td>
+                                            <td class="p-2.5 border border-slate-300">Simbol: kata bekerja karena komunitas penutur bahasa Indonesia memakainya demikian</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="text-sm text-slate-700">Kata ini tidak mirip dengan kemacetan dan tidak disebabkan secara fisik oleh kemacetan. Dalam istilah Peirce, "tanda arbitrer" Saussure adalah satu jenis tanda saja, yaitu simbol.</p>
+                        </div>
+                    </div>
+
+                    <!-- 8. Saussure dan Peirce berdampingan -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">8. Saussure dan Peirce berdampingan</h3>
+                        <div class="overflow-x-auto mb-3">
+                            <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                                <thead class="bg-slate-100 text-slate-800 font-semibold border-b border-slate-300">
+                                    <tr>
+                                        <th class="p-3 border border-slate-300">Aspek</th>
+                                        <th class="p-3 border border-slate-300">Saussure</th>
+                                        <th class="p-3 border border-slate-300">Peirce</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-medium">Struktur tanda</td>
+                                        <td class="p-3 border border-slate-300">Dua bagian (penanda, petanda)</td>
+                                        <td class="p-3 border border-slate-300">Tiga bagian (representamen, objek, interpretan)</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50">
+                                        <td class="p-3 border border-slate-300 font-medium">Dasar hubungan</td>
+                                        <td class="p-3 border border-slate-300">Konvensi arbitrer dalam sistem bahasa</td>
+                                        <td class="p-3 border border-slate-300">Beragam: kemiripan, keterkaitan nyata, konvensi</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-medium">Posisi dunia luar</td>
+                                        <td class="p-3 border border-slate-300">Dikesampingkan</td>
+                                        <td class="p-3 border border-slate-300">Hadir melalui objek</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50">
+                                        <td class="p-3 border border-slate-300 font-medium">Peran penafsir</td>
+                                        <td class="p-3 border border-slate-300">Tidak menjadi pusat</td>
+                                        <td class="p-3 border border-slate-300">Hadir melalui interpretan</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-medium">Makna</td>
+                                        <td class="p-3 border border-slate-300">Nilai dari perbedaan dalam sistem</td>
+                                        <td class="p-3 border border-slate-300">Proses yang bergulir lewat interpretan</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50">
+                                        <td class="p-3 border border-slate-300 font-medium">Cakupan</td>
+                                        <td class="p-3 border border-slate-300">Terutama bahasa</td>
+                                        <td class="p-3 border border-slate-300">Semua jenis tanda</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-medium">Disiplin asal</td>
+                                        <td class="p-3 border border-slate-300">Linguistik</td>
+                                        <td class="p-3 border border-slate-300">Logika dan filsafat</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>Kedua model tidak saling meniadakan. Saussure unggul menjelaskan bagaimana sistem bahasa menyusun perbedaan. Peirce unggul menjelaskan keragaman cara tanda berelasi dengan dunia dan bagaimana penafsiran bergerak.</p>
+                    </div>
+
+                    <!-- 9. Mengapa Peirce penting bagi kajian Al-Qur'an -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">9. Mengapa Peirce penting bagi kajian Al-Qur'an</h3>
+                        <p class="mb-3">Model Peirce memberi kosakata untuk sesuatu yang sudah lama dipraktikkan tradisi keilmuan Islam: bernalar dari tanda kepada apa yang ditunjuknya, dan menanyakan mengapa pembaca yang berbeda sampai pada pemahaman yang berbeda atas tanda yang sama. Dua ciri sangat berguna bagi kita. Pertama, objek berada di dalam relasi tanda, sehingga model ini tidak menutup makna dari dunia. Kedua, interpretan menjadikan penafsiran bagian dari definisi makna, bukan tambahan di belakang.</p>
+                        <p>Menerapkan kerangka Barat pada kajian Al-Qur'an bersifat analitis, bukan doktrinal. Ketika nanti kita menyebut suatu gejala sebagai tanda dalam pengertian Peirce, kita menjelaskan cara penalaran dari tanda ke objek bekerja, bukan membuat klaim tentang hakikat Tuhan atau wahyu. Pada pertemuan ini, kuasai alat analisisnya lebih dahulu dengan contoh sehari-hari. Penerapan pada ayat menyusul pada pertemuan berikutnya.</p>
+                    </div>
+
+                    <!-- Ringkasan & Istilah Kunci -->
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 space-y-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-emerald-900 mb-2">Ringkasan</h3>
+                            <ol class="list-decimal list-inside text-sm text-emerald-950 space-y-1.5">
+                                <li>Tanda menurut Peirce adalah relasi tiga unsur: representamen, objek, interpretan.</li>
+                                <li>Interpretan adalah efek pada penafsir, bukan penafsirnya, dan ia sendiri dapat menjadi tanda baru.</li>
+                                <li>Objek dapat dilihat sebagai objek segera (sebagaimana disajikan tanda) dan objek dinamis (sebagaimana adanya).</li>
+                                <li>Relasi tanda dan objek dapat berupa ikon (kemiripan), indeks (keterkaitan nyata), atau simbol (konvensi).</li>
+                                <li>Klasifikasi ini menyangkut relasi dalam konteks, dan tanda nyata biasanya campuran. Tugas analis adalah menentukan yang dominan.</li>
+                                <li>Tanda arbitrer Saussure sama dengan simbol dalam skema Peirce.</li>
+                            </ol>
+                        </div>
+
+                        <div class="border-t border-emerald-200 pt-3">
+                            <h4 class="text-sm font-bold text-emerald-900 mb-2">Istilah Kunci</h4>
+                            <div class="flex flex-wrap gap-2 text-xs">
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Representamen</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Objek (Segera, Dinamis)</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Interpretan</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Ikon</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Indeks</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Simbol</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Semiosis</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Flexible Navigation Buttons -->
+                <div class="mt-8 pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <button type="button" onclick="switchTab(1)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Kembali ke Identitas</span>
+                    </button>
+                    <button type="button" onclick="unlockNextStep(2)" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                        <span>Paham & Lanjut ke Kuis MCQ</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Autograded MCQ Quiz (8 Questions, Max 2 Attempts, Hidden Answer Key) -->
+        <section id="section-3" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-4 mb-6 flex-wrap gap-2">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Kuis Pilihan Ganda (Autograded)</h2>
+                        <p class="text-sm text-slate-600">8 Soal • Maksimal 2 Kali Percobaan • Anda bebas meninjau kembali tab Materi Tertulis</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 block">Sisa Percobaan</span>
+                        <span id="attempts-left-badge" class="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">2 dari 2</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Score Result Box -->
+                <div id="quiz-result-box" class="hidden mb-6 p-4 rounded-lg bg-emerald-50 border border-emerald-300">
+                    <div class="flex items-center justify-between flex-wrap gap-3">
+                        <div>
+                            <h3 class="font-bold text-emerald-900">Hasil Evaluasi Kuis</h3>
+                            <p class="text-sm text-emerald-800 mt-1" id="quiz-score-text">Skor Anda: 0/100</p>
+                            <p class="text-xs text-emerald-700 mt-0.5" id="quiz-highest-text">Skor Tertinggi Disimpan: 0/100</p>
+                        </div>
+                        <button type="button" id="btn-retake-quiz" onclick="retakeQuiz()" class="hidden bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Coba Lagi Kuis</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MCQ Form -->
+                <form id="quiz-form" onsubmit="submitQuiz(event)" class="space-y-6">
+                    <!-- Soal 1 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">1. Dalam model Peirce, interpretan adalah:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q1" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Orang yang membaca tanda</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q1" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Efek atau tanda lanjutan yang timbul dalam benak penafsir</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q1" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Bentuk fisik tanda</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q1" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Objek yang dirujuk tanda</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 2 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">2. Perbedaan struktural utama antara model Saussure dan Peirce adalah:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q2" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Saussure tiga bagian, Peirce dua bagian</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q2" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Saussure dua bagian (diadik), Peirce tiga bagian (triadik)</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q2" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Keduanya diadik dan hanya berbeda istilah</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q2" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Peirce menolak gagasan tanda</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 3 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">3. Asap yang membumbung dari sebuah rumah dipahami sebagai bukti adanya api. Asap berfungsi sebagai:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q3" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Ikon</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q3" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Simbol</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q3" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Indeks</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q3" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Representamen tanpa objek</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 4 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">4. Pernyataan yang paling tepat tentang klasifikasi ikon, indeks, dan simbol adalah:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q4" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Setiap benda selalu hanya masuk satu kategori</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q4" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Kategori itu menggambarkan relasi antara tanda dan objek, sehingga satu benda dapat berfungsi berbeda pada konteks berbeda</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q4" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Kata selalu berupa ikon</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q4" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Indeks memerlukan kesepakatan komunitas</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 5 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">5. Sebuah peta jalan pada ponsel Anda, ketika dilihat sebagai gambaran susunan jalan yang menyerupai tata letak sebenarnya, berfungsi terutama sebagai:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q5" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Simbol</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q5" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Indeks</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q5" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Ikon</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q5" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Interpretan</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 6 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">6. "Tanda arbitrer" milik Saussure paling dekat dengan kategori Peirce berikut:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q6" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Ikon</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q6" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Indeks</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q6" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Simbol</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q6" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Interpretan</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 7 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">7. Pembedaan antara objek segera dan objek dinamis berguna ketika:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q7" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Tanda mencerminkan objeknya secara sempurna</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q7" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Tanda menyajikan objeknya dengan cara yang dapat berbeda dari keadaan sebenarnya</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q7" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Tanda tidak memiliki interpretan</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q7" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Tanda itu berupa kata</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 8 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">8. Anda melihat jejak kaki basah di lantai kamar mandi dan menyimpulkan seseorang baru saja keluar. Interpretan dalam peristiwa ini adalah:</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q8" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Jejak kaki itu sendiri</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q8" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Orang yang baru saja keluar</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q8" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Kesimpulan atau pemahaman yang timbul dalam benak Anda</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q8" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Lantai kamar mandi</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Flexible Navigation & Submit Buttons -->
+                    <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="switchTab(2)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Kembali ke Materi Tertulis</span>
+                        </button>
+
+                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                            <button type="submit" id="btn-submit-quiz" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-check-double"></i>
+                                <span>Kirim & Nilai Kuis</span>
+                            </button>
+                            <button type="button" id="btn-next-from-quiz" onclick="unlockNextStep(3)" class="hidden w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition items-center justify-center gap-2">
+                                <span>Lanjut ke Tugas Esai</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Essay Form with 400-Word Minimum Validation -->
+        <section id="section-4" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Tugas Esai Singkat • Pertemuan 3</span>
+                    <h2 class="text-2xl font-bold text-slate-800 mt-1">Analisis Segitiga Peirce pada Objek Sehari-hari</h2>
+                    <div class="flex flex-wrap gap-3 text-xs text-slate-600 mt-2">
+                        <span class="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded"><strong>Panjang:</strong> 400 sampai 500 kata</span>
+                        <span class="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded"><strong>Batas pengumpulan:</strong> Sebelum Pertemuan 4</span>
+                        <span class="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded"><strong>Bahasa:</strong> Indonesia (Arab atau Inggris jika menghendaki)</span>
+                    </div>
+                </div>
+
+                <!-- Essay Instructions & Rubric -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 text-sm">
+                    <div class="lg:col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-3">
+                        <div>
+                            <h3 class="font-bold text-slate-900 mb-1">Perintah:</h3>
+                            <p class="text-slate-700 mb-2">Pilih <strong>satu</strong> dari benda atau peristiwa sehari-hari berikut, lalu analisislah dengan segitiga Peirce:</p>
+                            <ol class="list-decimal list-inside text-slate-800 space-y-0.5 pl-1 font-medium">
+                                <li>Awan mendung di langit sore</li>
+                                <li>Lampu lalu lintas di perempatan</li>
+                                <li>Ikon aplikasi WhatsApp di layar ponsel</li>
+                                <li>Foto pada kartu tanda mahasiswa</li>
+                                <li>Jejak kaki basah di lantai</li>
+                                <li>Bendera Merah Putih yang dikibarkan pada 17 Agustus</li>
+                            </ol>
+                        </div>
+
+                        <div class="border-t border-slate-200 pt-2">
+                            <h4 class="font-bold text-slate-900 mb-1">Esai Anda harus:</h4>
+                            <ol class="list-decimal list-inside text-slate-700 space-y-1 pl-1">
+                                <li>Mengidentifikasi sekurang-kurangnya satu representamen, objeknya, dan interpretan yang timbul pada penafsir.</li>
+                                <li>Mengklasifikasikan relasi tanda sebagai ikon, indeks, atau simbol dan membenarkan klasifikasi itu. Jika lebih dari satu berlaku, sebutkan yang dominan dan alasannya.</li>
+                                <li>Menunjukkan dengan satu contoh bagaimana pilihan Anda dapat menghasilkan interpretan yang berbeda pada penafsir yang berbeda (misalnya warga yang baru datang dan warga setempat).</li>
+                                <li>Merefleksikan secara singkat: apa yang terlihat melalui model Peirce yang tidak terlihat jika Anda hanya bertanya "apa artinya benda ini"?</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Rubric Box -->
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-emerald-900 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-clipboard-check text-emerald-700"></i>
+                                <span>Rubrik Penilaian (20 Poin)</span>
+                            </h3>
+                            <table class="w-full text-xs text-left border-collapse border border-emerald-300 bg-white">
+                                <thead class="bg-emerald-100 text-emerald-950 font-semibold">
+                                    <tr>
+                                        <th class="p-2 border border-emerald-300">Kriteria</th>
+                                        <th class="p-2 border border-emerald-300 text-center">Poin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="p-2 border border-emerald-200">Penggunaan triad yang akurat (representamen, objek, interpretan)</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">7</td>
+                                    </tr>
+                                    <tr class="bg-emerald-50/40">
+                                        <td class="p-2 border border-emerald-200">Klasifikasi yang beralasan (ikon, indeks, simbol)</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">6</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 border border-emerald-200">Analisis interpretan yang berbeda pada penafsir berbeda</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">4</td>
+                                    </tr>
+                                    <tr class="bg-emerald-50/40">
+                                        <td class="p-2 border border-emerald-200">Kejelasan dan bahasa</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">3</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-[11px] text-emerald-800 mt-3 italic">Identitas (Nama & NIM) akan otomatis tercantum pada berkas laporan PDF Anda.</p>
+                    </div>
+                </div>
+
+                <!-- Word Count Warning Box -->
+                <div id="essay-warning-box" class="mb-4 p-3 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base"></i>
+                    <span>Syarat Panjang Esai: <strong>400 sampai 500 kata</strong>. Tombol simpan akan aktif setelah minimal 400 kata terpenuhi.</span>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <label for="select-essay-topic" class="text-xs font-semibold text-slate-700">Objek Pilihan Anda:</label>
+                            <select id="select-essay-topic" onchange="syncReportData()" class="text-xs border border-slate-300 rounded px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                                <option value="1. Awan mendung di langit sore">1. Awan mendung di langit sore</option>
+                                <option value="2. Lampu lalu lintas di perempatan">2. Lampu lalu lintas di perempatan</option>
+                                <option value="3. Ikon aplikasi WhatsApp di layar ponsel">3. Ikon aplikasi WhatsApp di layar ponsel</option>
+                                <option value="4. Foto pada kartu tanda mahasiswa">4. Foto pada kartu tanda mahasiswa</option>
+                                <option value="5. Jejak kaki basah di lantai">5. Jejak kaki basah di lantai</option>
+                                <option value="6. Bendera Merah Putih yang dikibarkan pada 17 Agustus">6. Bendera Merah Putih yang dikibarkan pada 17 Agustus</option>
+                            </select>
+                        </div>
+                        <span id="essay-word-counter" class="text-xs font-bold text-amber-600">0 / 400–500 Kata</span>
+                    </div>
+
+                    <textarea id="input-essay" oninput="validateEssayWords()" rows="15" placeholder="Tuliskan analisis esai segitiga Peirce Anda secara lengkap di sini (400 sampai 500 kata)..." class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none text-slate-800 leading-relaxed text-sm"></textarea>
+
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
+                        <span id="essay-status-msg" class="text-xs text-rose-600 font-medium">Panjang esai belum mencapai 400 kata.</span>
+                    </div>
+
+                    <!-- Flexible Navigation Buttons -->
+                    <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="switchTab(3)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Kembali ke Kuis MCQ</span>
+                        </button>
+                        <button type="button" id="btn-submit-essay" disabled onclick="submitEssay()" class="w-full sm:w-auto bg-slate-300 text-slate-500 font-semibold px-6 py-3 rounded-lg shadow-none cursor-not-allowed transition flex items-center justify-center gap-2">
+                            <span>Simpan & Lanjut ke Laporan PDF</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: PDF Export & Submission Area -->
+        <section id="section-5" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="text-center max-w-xl mx-auto mb-8">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Unduh Laporan & Penyerahan</h2>
+                    <p class="text-sm text-slate-600 mt-1">Seluruh tahapan pembelajaran Pertemuan 3 telah diselesaikan. Unduh berkas PDF laporan Anda dan serahkan sebelum Pertemuan 4.</p>
+                </div>
+
+                <!-- Printable Area Target for html2pdf.js -->
+                <div class="bg-slate-100 p-4 sm:p-8 rounded-xl border border-slate-300 mb-6">
+                    <div id="pdf-report-content" class="bg-white p-8 rounded shadow-sm text-slate-800 space-y-6">
+                        <!-- PDF Header -->
+                        <div class="border-b-2 border-emerald-800 pb-4 flex justify-between items-start">
+                            <div>
+                                <h3 class="text-xl font-bold text-emerald-900 uppercase tracking-tight">Laporan Lembar Kerja Mahasiswa</h3>
+                                <p class="text-xs text-slate-600 font-semibold">Mata Kuliah Semiotika Al-Qur'an — Pertemuan 3: Peirce I, Tanda Triadik</p>
+                                <p class="text-xs text-slate-500">Prodi Ilmu Al-Qur'an dan Tafsir • UIN Salatiga</p>
+                            </div>
+                            <div class="text-right text-xs text-slate-500">
+                                <p>Tanggal Submit:</p>
+                                <p class="font-semibold text-slate-700" id="pdf-date">-</p>
+                            </div>
+                        </div>
+
+                        <!-- Identity Summary Table -->
+                        <div>
+                            <h4 class="text-xs font-bold uppercase text-emerald-800 tracking-wider mb-2">Identitas Mahasiswa</h4>
+                            <table class="w-full text-xs border border-slate-200">
+                                <tr class="border-b bg-slate-50">
+                                    <td class="p-2 font-semibold w-1/4 border-r">Nama Lengkap</td>
+                                    <td class="p-2 font-medium text-slate-800" id="pdf-nama">-</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-2 font-semibold border-r">Kelas</td>
+                                    <td class="p-2 font-medium text-slate-800" id="pdf-kelas">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-semibold border-r">NIM</td>
+                                    <td class="p-2 font-medium text-slate-800" id="pdf-nim">-</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Quiz Result Summary -->
+                        <div>
+                            <h4 class="text-xs font-bold uppercase text-emerald-800 tracking-wider mb-2">Hasil Evaluasi Kuis MCQ</h4>
+                            <div class="p-3 bg-emerald-50 rounded border border-emerald-200 text-xs flex justify-between items-center">
+                                <span>Nilai Akhir Kuis Pilihan Ganda (Skor Tertinggi):</span>
+                                <span id="pdf-quiz-score" class="font-bold text-sm text-emerald-900">0 / 100</span>
+                            </div>
+                        </div>
+
+                        <!-- Essay Content -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-xs font-bold uppercase text-emerald-800 tracking-wider">Tugas Esai Singkat (Analisis Segitiga Peirce)</h4>
+                                <span id="pdf-essay-wordcount" class="text-[11px] font-semibold text-slate-500">0 kata</span>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-700 mb-2">Objek Pilihan: <span id="pdf-essay-topic" class="font-normal">-</span></p>
+                            <div class="p-4 border border-slate-200 rounded text-xs leading-relaxed text-slate-800 bg-slate-50 whitespace-pre-wrap" id="pdf-essay-body">
+                                -
+                            </div>
+                        </div>
+
+                        <!-- Footer / Branding -->
+                        <div class="border-t border-slate-200 pt-4 flex justify-between items-center text-[10px] text-slate-500">
+                            <span>Sistem Perkuliahan Digital Semiotika Al-Qur'an</span>
+                            <span class="font-bold text-slate-700">Copyright © @ulfiputrasany</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action & Navigation Buttons -->
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
+                    <button type="button" onclick="switchTab(4)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Kembali ke Tugas Esai</span>
+                    </button>
+
+                    <button type="button" onclick="downloadPDF()" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-7 py-3.5 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        <span>Unduh Laporan PDF</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Branding -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 text-center border-t border-slate-800 no-print">
+        <p>Copyright © @ulfiputrasany • Mata Kuliah Semiotika Al-Qur'an UIN Salatiga</p>
+    </footer>
+
+    <!-- Application Logic Javascript -->
+    <script>
+        // Global Application State (5 Steps Total)
+        const state = {
+            student: { nama: '', kelas: '', nim: '' },
+            completedSteps: [1],
+            currentStep: 1,
+            totalSteps: 5,
+            quizAttempts: 0,
+            maxAttempts: 2,
+            highestScore: 0,
+            quizAnswers: {
+                q1: 'B', q2: 'B', q3: 'C', q4: 'B',
+                q5: 'C', q6: 'C', q7: 'B', q8: 'C'
+            },
+            userEssay: '',
+            essayTopic: ''
+        };
+
+        // Flexible Tab Navigation (Allows jumping back and forth across all unlocked tabs)
+        function switchTab(step) {
+            if (!state.completedSteps.includes(step)) return;
+
+            state.currentStep = step;
+            for (let i = 1; i <= state.totalSteps; i++) {
+                const sec = document.getElementById(`section-${i}`);
+                const tab = document.getElementById(`tab-${i}`);
+                
+                if (i === step) {
+                    sec.classList.remove('hidden');
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('text-slate-400', 'text-slate-700');
+                } else {
+                    sec.classList.add('hidden');
+                    tab.classList.remove('tab-active');
+                    if (state.completedSteps.includes(i)) {
+                        tab.classList.add('text-slate-700', 'hover:text-emerald-700', 'hover:bg-emerald-50/50', 'cursor-pointer');
+                        tab.classList.remove('text-slate-400');
+                    }
+                }
+            }
+
+            if (step === 5) {
+                syncReportData();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Unlock Next Step
+        function unlockNextStep(currentStep) {
+            const nextStep = currentStep + 1;
+            if (nextStep <= state.totalSteps && !state.completedSteps.includes(nextStep)) {
+                state.completedSteps.push(nextStep);
+            }
+
+            const nextTab = document.getElementById(`tab-${nextStep}`);
+            const nextNum = document.getElementById(`num-${nextStep}`);
+            if (nextTab) {
+                nextTab.classList.remove('step-locked', 'text-slate-400');
+                nextTab.classList.add('text-slate-700', 'hover:text-emerald-700', 'hover:bg-emerald-50/50', 'cursor-pointer');
+                nextNum.classList.remove('bg-slate-200', 'text-slate-600');
+                nextNum.classList.add('bg-emerald-100', 'text-emerald-800');
+            }
+
+            switchTab(nextStep);
+        }
+
+        // Sync Latest Student Data, Quiz Score & Essay to PDF Preview
+        function syncReportData() {
+            const essayEl = document.getElementById('input-essay');
+            const topicEl = document.getElementById('select-essay-topic');
+            if (essayEl && topicEl) {
+                const text = essayEl.value.trim();
+                const words = text ? text.split(/\s+/).filter(word => word.length > 0) : [];
+                state.userEssay = text;
+                state.essayTopic = topicEl.value;
+                document.getElementById('pdf-essay-topic').innerText = state.essayTopic;
+                document.getElementById('pdf-essay-wordcount').innerText = `${words.length} kata`;
+                document.getElementById('pdf-essay-body').innerText = text || '-';
+            }
+            document.getElementById('pdf-quiz-score').innerText = `${state.highestScore} / 100`;
+        }
+
+        // Step 1: Submit Identity Gate
+        function submitIdentity(event) {
+            event.preventDefault();
+            const nama = document.getElementById('input-nama').value.trim();
+            const kelas = document.getElementById('input-kelas').value;
+            const nim = document.getElementById('input-nim').value.trim();
+
+            if (!nama || !kelas || !nim) {
+                alert('Mohon lengkapi seluruh data identitas.');
+                return;
+            }
+
+            state.student = { nama, kelas, nim };
+
+            // Update UI Badges & PDF fields
+            document.getElementById('badge-name').innerText = nama;
+            document.getElementById('badge-class').innerText = `Kelas ${kelas}`;
+            document.getElementById('badge-nim').innerText = nim;
+            document.getElementById('student-badge').classList.remove('hidden');
+
+            document.getElementById('pdf-nama').innerText = nama;
+            document.getElementById('pdf-kelas').innerText = `Kelas ${kelas}`;
+            document.getElementById('pdf-nim').innerText = nim;
+            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('id-ID', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            unlockNextStep(1);
+        }
+
+        // Step 3: Submit & Autograde MCQ Quiz
+        function submitQuiz(event) {
+            event.preventDefault();
+
+            if (state.quizAttempts >= state.maxAttempts) {
+                alert('Anda telah mencapai batas maksimal percobaan kuis (2 kali).');
+                return;
+            }
+
+            const formData = new FormData(document.getElementById('quiz-form'));
+            let correctCount = 0;
+
+            for (let [question, answer] of formData.entries()) {
+                if (state.quizAnswers[question] === answer) {
+                    correctCount++;
+                }
+            }
+
+            const currentScore = Math.round((correctCount / 8) * 100);
+            state.quizAttempts++;
+
+            if (currentScore > state.highestScore) {
+                state.highestScore = currentScore;
+            }
+
+            // Update Result UI Box
+            document.getElementById('quiz-result-box').classList.remove('hidden');
+            document.getElementById('quiz-score-text').innerHTML = `Percobaan ke-${state.quizAttempts}: <strong>${currentScore} / 100</strong> (${correctCount} dari 8 soal benar).`;
+            document.getElementById('quiz-highest-text').innerText = `Skor Tertinggi Disimpan: ${state.highestScore} / 100`;
+            document.getElementById('pdf-quiz-score').innerText = `${state.highestScore} / 100`;
+
+            const attemptsLeft = state.maxAttempts - state.quizAttempts;
+            document.getElementById('attempts-left-badge').innerText = `${attemptsLeft} dari ${state.maxAttempts}`;
+
+            // Handle Retake vs Next Buttons
+            const btnSubmit = document.getElementById('btn-submit-quiz');
+            const btnNext = document.getElementById('btn-next-from-quiz');
+            const btnRetake = document.getElementById('btn-retake-quiz');
+
+            btnSubmit.classList.add('hidden');
+            btnNext.classList.remove('hidden');
+            btnNext.classList.add('flex');
+
+            if (attemptsLeft > 0) {
+                btnRetake.classList.remove('hidden');
+            } else {
+                btnRetake.classList.add('hidden');
+            }
+        }
+
+        // Retake MCQ Test
+        function retakeQuiz() {
+            if (state.quizAttempts >= state.maxAttempts) return;
+
+            document.getElementById('quiz-form').reset();
+            document.getElementById('quiz-result-box').classList.add('hidden');
+            document.getElementById('btn-submit-quiz').classList.remove('hidden');
+            document.getElementById('btn-next-from-quiz').classList.add('hidden');
+            document.getElementById('btn-next-from-quiz').classList.remove('flex');
+            window.scrollTo({ top: document.getElementById('section-3').offsetTop - 80, behavior: 'smooth' });
+        }
+
+        // Step 4: Live Essay Word Counter & 400-Word Minimum Validation
+        function validateEssayWords() {
+            const text = document.getElementById('input-essay').value.trim();
+            const words = text ? text.split(/\s+/).filter(word => word.length > 0) : [];
+            const count = words.length;
+
+            const counterEl = document.getElementById('essay-word-counter');
+            const statusMsg = document.getElementById('essay-status-msg');
+            const btnSubmit = document.getElementById('btn-submit-essay');
+            const warningBox = document.getElementById('essay-warning-box');
+
+            counterEl.innerText = `${count} / 400–500 Kata`;
+
+            if (count >= 400) {
+                counterEl.className = "font-bold text-emerald-700";
+                if (count <= 500) {
+                    statusMsg.innerText = "Panjang esai ideal (400–500 kata) dan siap disimpan!";
+                    statusMsg.className = "text-xs text-emerald-700 font-semibold";
+                } else {
+                    statusMsg.innerText = `Syarat minimal terpenuhi (${count} kata; sedikit melebihi batas anjuran 500 kata).`;
+                    statusMsg.className = "text-xs text-amber-700 font-semibold";
+                }
+                
+                btnSubmit.disabled = false;
+                btnSubmit.className = "w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2 cursor-pointer";
+                warningBox.classList.add('hidden');
+            } else {
+                counterEl.className = "font-bold text-amber-600";
+                statusMsg.innerText = `Panjang esai belum mencapai 400 kata (Kurang ${400 - count} kata).`;
+                statusMsg.className = "text-xs text-rose-600 font-medium";
+
+                btnSubmit.disabled = true;
+                btnSubmit.className = "w-full sm:w-auto bg-slate-300 text-slate-500 font-semibold px-6 py-3 rounded-lg shadow-none cursor-not-allowed transition flex items-center justify-center gap-2";
+                warningBox.classList.remove('hidden');
+            }
+        }
+
+        // Submit Essay
+        function submitEssay() {
+            syncReportData();
+            unlockNextStep(4);
+        }
+
+        // Step 5: PDF Generation via html2pdf.js
+        function downloadPDF() {
+            syncReportData();
+            const element = document.getElementById('pdf-report-content');
+            const opt = {
+                margin:       0.5,
+                filename:     `Laporan_Semiotika_AlQuran_P3_${state.student.nim}_${state.student.nama.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
 </body>
 </html>
