@@ -1,22 +1,1033 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Al-Qur'an Hadis — Pertemuan 3</title>
-<style>
-  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background:#f4f6f5; color:#12281F; margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
-  .card { background:#fff; border-radius:16px; padding:48px 40px; max-width:480px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
-  .tag { display:inline-block; background:#E8F1EC; color:#1F6F54; font-size:13px; font-weight:600; padding:4px 12px; border-radius:999px; margin-bottom:16px; }
-  h1 { font-size:22px; margin:0 0 8px; color:#0B3D2E; }
-  p { color:#5A6B63; font-size:15px; line-height:1.6; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Qur'an Hadis - Pertemuan 3: Makki-Madani dan Asbab al-Nuzul</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-locked { opacity: 0.45; pointer-events: none; cursor: not-allowed; }
+        .tab-active { border-bottom: 3px solid #059669 !important; color: #059669 !important; font-weight: 700 !important; background-color: #ecfdf5; }
+        #pdf-report-content { overflow: visible !important; height: auto !important; }
+        .pdf-avoid-break { page-break-inside: avoid !important; break-inside: avoid !important; }
+        @media print { .no-print { display: none !important; } }
+    </style>
 </head>
-<body>
-  <div class="card">
-    <span class="tag">Pertemuan 3</span>
-    <h1>Al-Qur'an Hadis</h1>
-    <p>Materi untuk pertemuan ini sedang disiapkan. Silakan kembali lagi nanti.</p>
-  </div>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Branding Bar -->
+    <header class="bg-emerald-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-200">Mata Kuliah Al-Qur'an Hadis • Program Studi Ilmu Hadis</span>
+                <h1 class="text-xl sm:text-2xl font-bold">Al-Qur'an Hadis — Pertemuan 3</h1>
+                <p class="text-xs text-emerald-100">Makki-Madani dan Asbab al-Nuzul</p>
+            </div>
+            <div id="student-badge" class="hidden bg-emerald-900/80 border border-emerald-600 rounded-lg px-3 py-1.5 text-right text-xs">
+                <p class="font-semibold text-emerald-100" id="badge-name">-</p>
+                <p class="text-emerald-300"><span id="badge-prodi">-</span> • <span id="badge-class">-</span> | NIM: <span id="badge-nim">-</span></p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Stepper Tabs (5 Steps - Flexible Switching for Unlocked Tabs) -->
+    <nav class="bg-white border-b border-slate-200 shadow-sm sticky top-[72px] z-40 overflow-x-auto">
+        <div class="max-w-6xl mx-auto flex justify-between min-w-[640px] px-4">
+            <button type="button" onclick="switchTab(1)" id="tab-1" class="tab-active py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent transition-colors cursor-pointer">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs font-bold" id="num-1">1</span> Identitas
+            </button>
+            <button type="button" onclick="switchTab(2)" id="tab-2" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-2">2</span> Materi Tertulis
+            </button>
+            <button type="button" onclick="switchTab(3)" id="tab-3" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-3">3</span> Kuis MCQ
+            </button>
+            <button type="button" onclick="switchTab(4)" id="tab-4" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-4">4</span> Tugas Esai
+            </button>
+            <button type="button" onclick="switchTab(5)" id="tab-5" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-5">5</span> Laporan PDF
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-8 flex-grow">
+
+        <!-- SECTION 1: Student Identity Gate -->
+        <section id="section-1" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+            <div class="max-w-md mx-auto">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Registrasi Mahasiswa</h2>
+                    <p class="text-slate-600 text-sm mt-1">Isi data diri lengkap sebelum memulai perkuliahan interaktif Al-Qur'an Hadis.</p>
+                </div>
+                <form id="form-identity" onsubmit="submitIdentity(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+                        <input type="text" id="input-nama" required placeholder="Contoh: Ahmad Fauzi" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Program Studi (Prodi)</label>
+                        <select id="input-prodi" required class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                            <option value="">-- Pilih Program Studi --</option>
+                            <option value="ILHA">ILHA (Ilmu Hadis)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Kelas</label>
+                        <select id="input-kelas" required class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                            <option value="">-- Pilih Kelas --</option>
+                            <option value="A">Kelas A</option>
+                            <option value="B">Kelas B</option>
+                            <option value="C">Kelas C</option>
+                            <option value="D">Kelas D</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">NIM (Nomor Induk Mahasiswa)</label>
+                        <input type="text" id="input-nim" required placeholder="Contoh: 1012023001" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-3 rounded-lg shadow-md transition duration-200 flex items-center justify-center gap-2">
+                        <span>Buka Materi Perkuliahan</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Complete Written Materials -->
+        <section id="section-2" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">A. Materi Tertulis • Pertemuan 3</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Makki-Madani dan Asbab al-Nuzul</h2>
+                    <p class="text-sm text-slate-600">Mata Kuliah Al-Qur'an Hadis • Memahami Konteks Turunnya Wahyu</p>
+                </div>
+
+                <!-- Capaian Pembelajaran -->
+                <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-8 space-y-2 text-sm text-emerald-950">
+                    <h3 class="text-base font-bold text-emerald-900 flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye text-emerald-700"></i>
+                        <span>Capaian Pembelajaran</span>
+                    </h3>
+                    <p class="text-emerald-900 font-medium">Setelah mempelajari materi ini, mahasiswa mampu:</p>
+                    <ol class="list-decimal list-inside space-y-1.5 pl-1">
+                        <li>Menjelaskan pengertian ayat dan surah Makki serta Madani, beserta tiga cara pembedaannya.</li>
+                        <li>Menyebutkan ciri-ciri umum ayat Makki dan Madani dan memberi contoh.</li>
+                        <li>Menjelaskan pengertian <em>asbab al-nuzul</em> dan manfaatnya dalam memahami ayat.</li>
+                        <li>Mengenali batas-batas <em>asbab al-nuzul</em>, termasuk kaidah <em>al-‘ibrah bi ‘umum al-lafz la bi khusus al-sabab</em>.</li>
+                        <li>Menganalisis satu ayat dengan mempertimbangkan konteks turunnya.</li>
+                    </ol>
+                </div>
+
+                <div class="prose max-w-none text-slate-800 space-y-8 leading-relaxed">
+
+                    <!-- 1. Pendahuluan -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">1. Pendahuluan: Mengapa Konteks Itu Penting?</h3>
+                        <p class="mb-3">Bayangkan sebuah pesan singkat yang hanya berbunyi “Jangan datang.” Maknanya sangat bergantung pada siapa yang mengirim, kepada siapa, kapan, dan dalam situasi apa. Bisa berarti larangan, bisa juga bentuk perhatian karena jalanan sedang banjir.</p>
+                        <p class="mb-3">Al-Qur’an diturunkan secara bertahap selama sekitar 23 tahun. Ayat-ayatnya turun dalam situasi yang berbeda: ketika umat Islam masih sedikit dan tertekan di Mekah, lalu ketika mereka sudah menjadi komunitas yang memiliki tatanan sosial dan politik di Madinah. Dua ilmu yang membantu kita membaca situasi ini adalah <strong>ilmu Makki-Madani</strong> (kapan dan di mana ayat turun) dan <strong>ilmu <em>asbab al-nuzul</em></strong> (mengapa atau dalam peristiwa apa ayat turun).</p>
+                        <div class="bg-slate-50 border-l-4 border-emerald-600 p-4 rounded-r-lg text-sm">
+                            <p class="text-slate-800"><strong>Catatan Prinsip:</strong> Keduanya bukan alat untuk membatasi Al-Qur’an pada masa lalu. Keduanya alat untuk membaca pesan Al-Qur’an dengan lebih tepat, sehingga kita tidak salah menerapkannya.</p>
+                        </div>
+                    </div>
+
+                    <!-- 2. Makki dan Madani -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">2. Makki dan Madani</h3>
+
+                        <h4 class="font-bold text-emerald-900 text-base mt-4 mb-2">2.1 Tiga Cara Mendefinisikan</h4>
+                        <p class="mb-2">Para ulama mendefinisikan Makki dan Madani dengan tiga pendekatan:</p>
+                        <ol class="list-decimal list-inside space-y-2 pl-1 mb-4">
+                            <li><strong>Berdasarkan waktu.</strong> Makki adalah yang turun sebelum Nabi hijrah ke Madinah, Madani adalah yang turun setelahnya. Ini pendapat yang paling banyak dipakai. Dengan definisi ini, ayat yang turun di Mekah pada saat Fathu Makkah (tahun 8 H) atau saat haji wada’ tetap tergolong Madani karena turunnya sesudah hijrah.</li>
+                            <li><strong>Berdasarkan tempat.</strong> Makki adalah yang turun di Mekah dan sekitarnya, Madani yang turun di Madinah dan sekitarnya. Kelemahannya, ada ayat yang turun di perjalanan atau di tempat lain, sehingga tidak masuk kategori mana pun.</li>
+                            <li><strong>Berdasarkan sasaran pembicaraan.</strong> Makki ditujukan kepada penduduk Mekah, Madani kepada penduduk Madinah. Pendekatan ini juga punya keterbatasan karena tidak semua ayat jelas sasarannya.</li>
+                        </ol>
+                        <p class="text-sm bg-emerald-50 border border-emerald-200 text-emerald-900 p-3 rounded-lg mb-5">Karena definisi pertama paling konsisten, kita memakainya sebagai pegangan dalam mata kuliah ini.</p>
+
+                        <h4 class="font-bold text-emerald-900 text-base mt-4 mb-2">2.2 Dari Mana Kita Tahu Sebuah Surah Makki atau Madani?</h4>
+                        <p class="mb-3">Sumber utamanya adalah riwayat (<em>naql</em>) dari para sahabat dan tabi’in yang menyaksikan atau mengetahui langsung turunnya wahyu. Selain itu ada ijtihad ulama yang memperhatikan ciri-ciri kebahasaan dan isi surah. Perlu diingat bahwa tidak ada keterangan langsung dari Nabi yang merinci status setiap surah, sehingga pada sebagian surah terdapat perbedaan pendapat ulama.</p>
+                        <p class="mb-3">Menurut pembagian yang umum dipakai, sekitar <strong>86 surah tergolong Makki</strong> dan <strong>28 surah Madani</strong>. Angka ini bisa sedikit berbeda dalam sumber lain karena ada surah yang diperselisihkan statusnya.</p>
+                        <div class="p-4 rounded-lg bg-slate-50 border border-slate-200 mb-5 text-sm">
+                            <p class="font-bold text-slate-900 mb-1.5">Beberapa contoh yang perlu dikenal:</p>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li>Wahyu pertama, yaitu awal <strong>QS. Al-‘Alaq</strong>, turun di Mekah (Makki).</li>
+                                <li><strong>QS. Al-Fatihah, Al-An’am, Yasin, dan Al-Ikhlas</strong> umumnya dikategorikan Makki.</li>
+                                <li><strong>QS. Al-Baqarah, Ali ‘Imran, An-Nisa, dan Al-Ma’idah</strong> dikategorikan Madani.</li>
+                                <li>Ada surah yang berstatus <strong>campuran</strong>: sebagian ayatnya Makki dan sebagian Madani, misalnya QS. Al-An’am menurut sebagian riwayat dan QS. Al-Hajj.</li>
+                            </ul>
+                        </div>
+
+                        <h4 class="font-bold text-emerald-900 text-base mt-4 mb-2">2.3 Ciri-Ciri Umum</h4>
+                        <p class="mb-3 text-sm text-slate-600">Ciri-ciri berikut adalah kecenderungan, bukan aturan mutlak.</p>
+                        <div class="overflow-x-auto my-4">
+                            <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                                <thead class="bg-slate-100 text-slate-800 font-semibold border-b border-slate-300">
+                                    <tr>
+                                        <th class="p-3 border border-slate-300 w-1/5">Aspek</th>
+                                        <th class="p-3 border border-slate-300 w-2/5">Cenderung Makki</th>
+                                        <th class="p-3 border border-slate-300 w-2/5">Cenderung Madani</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-semibold text-emerald-900">Panjang ayat dan surah</td>
+                                        <td class="p-3 border border-slate-300">Ayat dan surah relatif pendek, irama kuat</td>
+                                        <td class="p-3 border border-slate-300">Ayat dan surah relatif panjang</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50">
+                                        <td class="p-3 border border-slate-300 font-semibold text-emerald-900">Tema utama</td>
+                                        <td class="p-3 border border-slate-300">Tauhid, kebangkitan dan hari akhir, kenabian, pembentukan akhlak</td>
+                                        <td class="p-3 border border-slate-300">Hukum dan aturan sosial, keluarga, muamalah, jihad, tata kelola masyarakat</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-semibold text-emerald-900">Lawan bicara</td>
+                                        <td class="p-3 border border-slate-300">Sering “wahai manusia” (<em>ya ayyuha al-nas</em>)</td>
+                                        <td class="p-3 border border-slate-300">Sering “wahai orang-orang yang beriman” (<em>ya ayyuha al-ladzina amanu</em>)</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200 bg-slate-50">
+                                        <td class="p-3 border border-slate-300 font-semibold text-emerald-900">Kelompok yang disinggung</td>
+                                        <td class="p-3 border border-slate-300">Kaum musyrik Mekah</td>
+                                        <td class="p-3 border border-slate-300">Ahli Kitab dan kaum munafik</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-semibold text-emerald-900">Gaya</td>
+                                        <td class="p-3 border border-slate-300">Peringatan tegas, sumpah, kisah umat terdahulu</td>
+                                        <td class="p-3 border border-slate-300">Perincian aturan, ajakan menaati ketentuan</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="mb-5">Mengapa ada perbedaan ini? Karena kebutuhan masyarakatnya berbeda. Di Mekah, fondasi keimanan dan karakter harus dibangun lebih dahulu. Di Madinah, ketika sudah ada komunitas, dibutuhkan aturan hidup bersama: pernikahan, warisan, perjanjian, dan sebagainya.</p>
+
+                        <h4 class="font-bold text-emerald-900 text-base mt-4 mb-2">2.4 Manfaat Mempelajari Makki-Madani</h4>
+                        <ol class="list-decimal list-inside space-y-2 pl-1">
+                            <li><strong>Memahami tahapan dakwah.</strong> Kita melihat bagaimana pesan Islam disampaikan secara bertahap, dari penguatan akidah dan akhlak menuju penataan masyarakat.</li>
+                            <li><strong>Membantu menafsirkan.</strong> Mengetahui konteks turun membantu kita membedakan pesan yang menjawab situasi tertentu dengan prinsip yang berlaku luas.</li>
+                            <li><strong>Membantu memahami urutan hukum</strong> pada topik yang hukumnya bertahap.</li>
+                        </ol>
+                    </div>
+
+                    <!-- 3. Asbab al-Nuzul -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">3. Asbab al-Nuzul</h3>
+
+                        <h4 class="font-bold text-emerald-900 text-base mt-4 mb-2">3.1 Pengertian</h4>
+                        <p class="mb-3"><em>Asbab al-nuzul</em> secara bahasa berarti “sebab-sebab turun”. Secara istilah, ia adalah peristiwa atau pertanyaan yang melatarbelakangi turunnya satu atau beberapa ayat, di mana ayat tersebut memberi jawaban atau penjelasan atas peristiwa atau pertanyaan itu.</p>
+                        <p class="mb-2">Ada dua bentuk umum:</p>
+                        <ol class="list-decimal list-inside space-y-1.5 pl-1 mb-3">
+                            <li><strong>Berupa peristiwa.</strong> Sesuatu terjadi, lalu ayat turun menanggapinya.</li>
+                            <li><strong>Berupa pertanyaan.</strong> Seseorang bertanya kepada Nabi, lalu ayat turun menjawabnya (misalnya ayat-ayat yang diawali “mereka bertanya kepadamu tentang ...”).</li>
+                        </ol>
+                        <p class="text-sm bg-amber-50 border-l-4 border-amber-500 p-3.5 rounded-r-lg text-amber-950 mb-5"><strong>Penting dicatat:</strong> Tidak semua ayat memiliki <em>asbab al-nuzul</em>. Banyak ayat turun sebagai petunjuk umum, kisah, atau penjelasan prinsip tanpa peristiwa khusus yang melatarinya.</p>
+
+                        <h4 class="font-bold text-emerald-900 text-base mt-4 mb-2">3.2 Bagaimana Kita Mengetahuinya?</h4>
+                        <p class="mb-3"><em>Asbab al-nuzul</em> diketahui melalui riwayat, terutama dari sahabat yang menyaksikan peristiwa itu. Karena ia berkaitan dengan fakta sejarah yang tidak bisa dicapai dengan akal semata, para ulama menuntut riwayat yang dapat dipertanggungjawabkan. Ungkapan sahabat yang tegas, misalnya “ayat ini turun ketika terjadi begini”, dipandang lebih kuat daripada ungkapan yang hanya menjelaskan isi ayat.</p>
+                        <p class="mb-3">Beberapa kitab klasik yang membahas topik ini, antara lain karya <strong>al-Wahidi</strong> (<em>Asbab al-Nuzul</em>) dan <strong>al-Suyuti</strong> (<em>Lubab al-Nuqul fi Asbab al-Nuzul</em>). Kita tidak mengasumsikan semua riwayat di dalamnya sama kuatnya. Kualitas riwayat tetap perlu diperiksa, dan inilah yang nanti akan kita latih pada bagian Hadis.</p>
+                        <p class="mb-5">Satu catatan kehati-hatian: kadang sahabat atau tabi’in memakai ungkapan seperti “ayat ini turun tentang ...”. Ungkapan ini bisa berarti sebab turun yang sebenarnya, bisa juga berarti “ayat ini mencakup kasus ini” sebagai penjelasan atau contoh penerapan. Karena itu, kita perlu cermat membaca redaksinya.</p>
+
+                        <h4 class="font-bold text-emerald-900 text-base mt-4 mb-3">3.3 Contoh-Contoh</h4>
+                        <div class="space-y-4 mb-5">
+                            <!-- Contoh 1 -->
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h5 class="font-bold text-emerald-900 text-base mb-1.5">Contoh 1: QS. Al-Baqarah 222 (Pertanyaan tentang Haid)</h5>
+                                <p class="text-sm mb-2">Ayat ini berbicara tentang haid. Menurut riwayat dalam <em>Sahih Muslim</em> dari Anas bin Malik, pada masa itu sebagian orang Yahudi memperlakukan perempuan yang sedang haid dengan sangat ketat: tidak mau makan bersama dan tidak mau tinggal serumah. Para sahabat kemudian bertanya kepada Nabi, lalu turunlah ayat ini. Nabi menjelaskan bahwa yang dijauhi hanyalah hubungan suami-istri, bukan interaksi sosial lainnya.</p>
+                                <p class="text-sm text-emerald-900 bg-emerald-50 p-2.5 rounded border border-emerald-200"><strong>Pelajaran konteks:</strong> Ayat ini mengoreksi dua kutub, yaitu sikap yang terlalu ketat dan sikap yang tidak menjaga batas. Tanpa konteks, orang mungkin membaca ayat ini sebagai perintah menjauhi perempuan secara umum.</p>
+                            </div>
+
+                            <!-- Contoh 2 -->
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h5 class="font-bold text-emerald-900 text-base mb-1.5">Contoh 2: QS. Al-Mujadilah 1–4 (Kasus Khawlah binti Tsa’labah)</h5>
+                                <p class="text-sm mb-2">Menurut riwayat yang masyhur, seorang perempuan bernama Khawlah mengadu kepada Nabi mengenai ucapan suaminya yang memutus hubungan pernikahan secara <em>zihar</em> (tradisi jahiliah). Ia mengadukan nasibnya kepada Allah, lalu turunlah ayat-ayat tersebut yang memberi penyelesaian dan menghapus praktik yang merugikan perempuan itu.</p>
+                                <p class="text-sm text-emerald-900 bg-emerald-50 p-2.5 rounded border border-emerald-200"><strong>Pelajaran konteks:</strong> Ayat ini bermula dari kasus individual, tetapi hukumnya berlaku umum bagi siapa pun.</p>
+                            </div>
+
+                            <!-- Contoh 3 -->
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h5 class="font-bold text-emerald-900 text-base mb-1.5">Contoh 3: QS. ‘Abasa 1–10 (Ibn Ummi Maktum)</h5>
+                                <p class="text-sm mb-2">Menurut riwayat al-Tirmidzi dan lainnya, ayat ini berkaitan dengan peristiwa ketika Nabi sedang berbicara dengan para pembesar Quraisy dan ‘Abdullah bin Ummi Maktum, seorang sahabat tunanetra, datang meminta ajaran. Nabi kurang memberi perhatian karena sedang fokus kepada para pembesar itu, lalu turun teguran.</p>
+                                <p class="text-sm text-emerald-900 bg-emerald-50 p-2.5 rounded border border-emerald-200"><strong>Pelajaran konteks:</strong> Peristiwa ini mengajarkan bahwa dalam dakwah, setiap orang yang tulus mencari kebenaran layak mendapat perhatian, tanpa memandang kedudukan sosial.</p>
+                            </div>
+
+                            <!-- Contoh 4 -->
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h5 class="font-bold text-emerald-900 text-base mb-1.5">Contoh 4: QS. Al-Hujurat 6 (Verifikasi Berita)</h5>
+                                <p class="text-sm mb-2">Ayat ini mengajarkan agar berita dari orang yang tidak jelas kredibilitasnya diperiksa terlebih dahulu. Riwayat sebab turunnya dikaitkan dengan peristiwa utusan Nabi kepada Bani al-Mushthaliq. Sebagian ulama memperdebatkan kekuatan riwayat dan identitas tokohnya. Meski demikian, pesan ayat ini jelas dan berlaku umum, yaitu perintah <em>tabayyun</em>. Contoh ini sekaligus menunjukkan bahwa pesan ayat tidak bergantung penuh pada satu riwayat sebab turun. Kita akan memakai ayat ini lagi pada pertemuan 14.</p>
+                            </div>
+                        </div>
+
+                        <h4 class="font-bold text-emerald-900 text-base mt-4 mb-2">3.4 Manfaat Asbab al-Nuzul</h4>
+                        <ol class="list-decimal list-inside space-y-1.5 pl-1 mb-5">
+                            <li><strong>Memahami makna ayat dengan tepat.</strong> Konteks mencegah salah paham, seperti pada contoh QS. Al-Baqarah 222.</li>
+                            <li><strong>Memahami hikmah di balik ketentuan.</strong> Kita melihat masalah nyata yang dijawab Al-Qur’an.</li>
+                            <li><strong>Membantu mengkhususkan atau menjelaskan</strong> ungkapan yang umum.</li>
+                            <li><strong>Mengikat pesan dengan peristiwa nyata,</strong> sehingga lebih mudah diingat dan dipahami.</li>
+                        </ol>
+
+                        <h4 class="font-bold text-emerald-900 text-base mt-4 mb-2">3.5 Satu Sebab, Banyak Ayat; Satu Ayat, Banyak Riwayat</h4>
+                        <p class="mb-2">Dua kemungkinan yang perlu dikenal:</p>
+                        <ul class="list-disc list-inside space-y-1.5 pl-1 mb-2">
+                            <li>Satu peristiwa melatari beberapa ayat, atau sebaliknya,</li>
+                            <li>Satu ayat memiliki lebih dari satu riwayat sebab turun. Dalam hal ini ulama melihat kualitas riwayat dan mencari kemungkinan penggabungan, misalnya karena ayat itu turun menanggapi beberapa peristiwa yang mirip.</li>
+                        </ul>
+                        <p>Karena itulah kita tidak boleh cepat menyimpulkan setelah menemukan satu riwayat saja.</p>
+                    </div>
+
+                    <!-- 4. Kaidah -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">4. Kaidah: <em>al-‘ibrah bi ‘umum al-lafz la bi khusus al-sabab</em></h3>
+                        <p class="mb-3">Ini salah satu kaidah terpenting. Artinya kurang lebih: <strong>yang dijadikan pegangan adalah keumuman redaksi ayat, bukan kekhususan sebab turunnya.</strong></p>
+                        <p class="mb-3">Maksudnya, bila sebuah ayat turun karena kasus tertentu tetapi redaksinya bersifat umum, hukum atau pesannya berlaku bagi semua yang memenuhi kondisi serupa, tidak hanya orang yang menjadi sebab turun.</p>
+                        <p class="mb-3"><strong>Contoh:</strong> Ayat-ayat tentang <em>li’an</em> (QS. An-Nur 6–9) berkaitan dengan peristiwa seorang suami yang menuduh istrinya, namun ketentuannya berlaku bagi semua suami-istri yang berada dalam kasus serupa. Demikian pula ayat tentang <em>zihar</em> yang turun karena kasus Khawlah.</p>
+                        <p class="mb-3">Mayoritas ulama memegang kaidah ini. Ada pandangan minoritas yang menekankan kekhususan sebab dalam kasus tertentu, namun pada umumnya perbedaannya tidak mengubah kesimpulan yang luas.</p>
+                        <div class="bg-emerald-50 border-l-4 border-emerald-600 p-4 rounded-r-lg text-sm">
+                            <p class="font-bold text-emerald-900 mb-1.5">Kaidah ini penting karena melindungi kita dari dua kesalahan sekaligus:</p>
+                            <ul class="list-disc list-inside text-emerald-950 space-y-1">
+                                <li><strong>Kesalahan pertama:</strong> menganggap ayat hanya berlaku bagi orang di masa itu, sehingga pesannya tidak relevan hari ini.</li>
+                                <li><strong>Kesalahan kedua:</strong> mengabaikan konteks sama sekali sehingga ayat dibaca seolah turun tanpa latar belakang.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 5. Batas-batas dan kehati-hatian -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">5. Batas-Batas dan Kehati-hatian</h3>
+                        <ol class="list-decimal list-inside space-y-2 pl-1">
+                            <li><strong>Tidak semua ayat punya <em>asbab al-nuzul</em>.</strong> Jangan memaksakan mencari konteks khusus untuk setiap ayat.</li>
+                            <li><strong>Riwayat harus diperiksa.</strong> Tidak semua riwayat sebab turun sama kuat. Hindari mengutip riwayat sebab turun dari sumber yang tidak jelas, termasuk dari media sosial.</li>
+                            <li><strong>Konteks tidak sama dengan pembatasan.</strong> Mengetahui sebab turun tidak otomatis membatasi pesan ayat pada kasus itu (lihat kaidah di atas).</li>
+                            <li><strong>Jangan mencampuradukkan dua hal.</strong> Status Makki-Madani menyangkut waktu dan tempat umum, sedangkan <em>asbab al-nuzul</em> menyangkut peristiwa tertentu. Sebuah ayat bisa memiliki status Madani tanpa memiliki sebab turun khusus.</li>
+                            <li><strong>Hati-hati dengan generalisasi ciri.</strong> Menyebut suatu ayat “pasti Makki karena pendek” adalah kesimpulan yang gegabah. Ciri-ciri hanyalah petunjuk.</li>
+                        </ol>
+                    </div>
+
+                    <!-- 6. Ringkasan & 7. Istilah Kunci -->
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 space-y-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-emerald-900 mb-2">6. Ringkasan</h3>
+                            <ul class="list-disc list-inside text-sm text-emerald-950 space-y-1.5">
+                                <li>Makki dan Madani paling umum dibedakan berdasarkan waktu: sebelum dan sesudah hijrah.</li>
+                                <li>Ciri Makki dan Madani adalah kecenderungan umum, bukan aturan mutlak.</li>
+                                <li><em>Asbab al-nuzul</em> adalah peristiwa atau pertanyaan yang melatari turunnya ayat, diketahui lewat riwayat.</li>
+                                <li>Tidak semua ayat punya sebab turun, dan riwayat sebab turun perlu diperiksa kualitasnya.</li>
+                                <li>Kaidah <em>al-‘ibrah bi ‘umum al-lafz</em> menjaga agar pesan ayat tetap berlaku luas meski ia turun karena kasus tertentu.</li>
+                                <li>Konteks membantu kita memahami ayat dengan tepat, bukan membatasi relevansinya.</li>
+                            </ul>
+                        </div>
+
+                        <div class="border-t border-emerald-200 pt-3">
+                            <h4 class="text-sm font-bold text-emerald-900 mb-2">7. Istilah Kunci</h4>
+                            <div class="flex flex-wrap gap-2 text-xs">
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Makki</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Madani</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Hijrah</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Asbab al-nuzul</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Riwayat</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">al-‘ibrah bi ‘umum al-lafz</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Zihar</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Li’an</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Tabayyun</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Flexible Navigation Buttons -->
+                <div class="mt-8 pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <button type="button" onclick="switchTab(1)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Kembali ke Identitas</span>
+                    </button>
+                    <button type="button" onclick="unlockNextStep(2)" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                        <span>Paham & Lanjut ke Kuis MCQ</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Autograded MCQ Quiz (14 Questions, Max 2 Attempts, Hidden Answer Key) -->
+        <section id="section-3" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-4 mb-6 flex-wrap gap-2">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">B. Soal Pilihan Ganda (MCQ)</span>
+                        <h2 class="text-2xl font-bold text-slate-800">Kuis Pilihan Ganda (Autograded)</h2>
+                        <p class="text-sm text-slate-600">14 Soal • Maksimal 2 Kali Percobaan • Anda bebas meninjau kembali tab Materi Tertulis</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 block">Sisa Percobaan</span>
+                        <span id="attempts-left-badge" class="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">2 dari 2</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Score Result Box -->
+                <div id="quiz-result-box" class="hidden mb-6 p-4 rounded-lg bg-emerald-50 border border-emerald-300">
+                    <div class="flex items-center justify-between flex-wrap gap-3">
+                        <div>
+                            <h3 class="font-bold text-emerald-900">Hasil Evaluasi Kuis</h3>
+                            <p class="text-sm text-emerald-800 mt-1" id="quiz-score-text">Skor Anda: 0/100</p>
+                            <p class="text-xs text-emerald-700 mt-0.5" id="quiz-highest-text">Skor Tertinggi Disimpan: 0/100</p>
+                            <p class="text-[11px] text-slate-500 italic mt-1">*Kunci jawaban tidak ditampilkan sesuai kebijakan evaluasi.</p>
+                        </div>
+                        <button type="button" id="btn-retake-quiz" onclick="retakeQuiz()" class="hidden bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Coba Lagi Kuis</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MCQ Form (14 Questions) -->
+                <form id="quiz-form" onsubmit="submitQuiz(event)" class="space-y-6">
+                    <!-- Soal 1 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">1. Menurut definisi yang paling banyak dipakai, ayat Makki adalah ayat yang turun...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q1" value="A" required class="text-emerald-600"><span>A. di kota Mekah saja</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q1" value="B" class="text-emerald-600"><span>B. sebelum Nabi hijrah ke Madinah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q1" value="C" class="text-emerald-600"><span>C. kepada penduduk Mekah saja</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q1" value="D" class="text-emerald-600"><span>D. pada masa Nabi masih sendirian</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q1" value="E" class="text-emerald-600"><span>E. sebelum Nabi menerima wahyu pertama</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 2 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">2. Ayat yang turun di Mekah pada saat Fathu Makkah (tahun 8 H) termasuk...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q2" value="A" required class="text-emerald-600"><span>A. Makki karena turun di Mekah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q2" value="B" class="text-emerald-600"><span>B. Madani karena turun setelah hijrah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q2" value="C" class="text-emerald-600"><span>C. tidak termasuk keduanya</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q2" value="D" class="text-emerald-600"><span>D. Makki karena ditujukan kepada penduduk Mekah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q2" value="E" class="text-emerald-600"><span>E. campuran Makki dan Madani</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 3 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">3. Ciri yang paling cenderung dimiliki ayat Makki adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q3" value="A" required class="text-emerald-600"><span>A. rincian hukum waris dan pernikahan</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q3" value="B" class="text-emerald-600"><span>B. pembahasan tentang kaum munafik</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q3" value="C" class="text-emerald-600"><span>C. penekanan pada tauhid dan hari akhir</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q3" value="D" class="text-emerald-600"><span>D. aturan tentang perjanjian dan jihad</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q3" value="E" class="text-emerald-600"><span>E. dialog dengan Ahli Kitab secara panjang</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 4 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">4. Seruan “wahai orang-orang yang beriman” (<em>ya ayyuha al-ladzina amanu</em>) lebih sering muncul pada surah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q4" value="A" required class="text-emerald-600"><span>A. Makki</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q4" value="B" class="text-emerald-600"><span>B. Madani</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q4" value="C" class="text-emerald-600"><span>C. yang sangat pendek</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q4" value="D" class="text-emerald-600"><span>D. yang berisi sumpah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q4" value="E" class="text-emerald-600"><span>E. yang berisi kisah umat terdahulu</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 5 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">5. Pernyataan yang paling tepat tentang ciri Makki dan Madani adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q5" value="A" required class="text-emerald-600"><span>A. ciri tersebut aturan mutlak tanpa pengecualian</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q5" value="B" class="text-emerald-600"><span>B. ciri tersebut kecenderungan umum, bukan aturan mutlak</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q5" value="C" class="text-emerald-600"><span>C. ciri tersebut hanya berlaku untuk surah panjang</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q5" value="D" class="text-emerald-600"><span>D. ciri tersebut hanya berlaku untuk ayat hukum</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q5" value="E" class="text-emerald-600"><span>E. ciri tersebut ditetapkan langsung oleh Nabi untuk tiap surah</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 6 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">6. Sumber utama untuk mengetahui status Makki atau Madani sebuah surah adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q6" value="A" required class="text-emerald-600"><span>A. kesan pembaca terhadap gaya bahasanya</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q6" value="B" class="text-emerald-600"><span>B. riwayat dari sahabat dan tabi’in, dilengkapi ijtihad ulama</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q6" value="C" class="text-emerald-600"><span>C. panjang pendeknya surah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q6" value="D" class="text-emerald-600"><span>D. jumlah ayat dalam surah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q6" value="E" class="text-emerald-600"><span>E. urutan surah dalam mushaf</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 7 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">7. <em>Asbab al-nuzul</em> dapat diartikan sebagai...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q7" value="A" required class="text-emerald-600"><span>A. urutan surah dalam mushaf</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q7" value="B" class="text-emerald-600"><span>B. peristiwa atau pertanyaan yang melatari turunnya ayat</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q7" value="C" class="text-emerald-600"><span>C. perbedaan bacaan antar qari</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q7" value="D" class="text-emerald-600"><span>D. proses penulisan Al-Qur’an</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q7" value="E" class="text-emerald-600"><span>E. pembagian surah berdasarkan panjangnya</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 8 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">8. Pernyataan yang benar tentang <em>asbab al-nuzul</em> adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q8" value="A" required class="text-emerald-600"><span>A. setiap ayat pasti memiliki asbab al-nuzul</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q8" value="B" class="text-emerald-600"><span>B. tidak semua ayat memiliki asbab al-nuzul</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q8" value="C" class="text-emerald-600"><span>C. asbab al-nuzul hanya ada pada surah Makki</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q8" value="D" class="text-emerald-600"><span>D. asbab al-nuzul hanya ada pada ayat hukum</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q8" value="E" class="text-emerald-600"><span>E. asbab al-nuzul ditentukan oleh pendapat pribadi penafsir</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 9 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">9. <em>Asbab al-nuzul</em> pada umumnya diketahui melalui...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q9" value="A" required class="text-emerald-600"><span>A. riwayat yang dapat dipertanggungjawabkan</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q9" value="B" class="text-emerald-600"><span>B. tebakan berdasarkan isi ayat</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q9" value="C" class="text-emerald-600"><span>C. gaya bahasa ayat</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q9" value="D" class="text-emerald-600"><span>D. pendapat mayoritas masyarakat</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q9" value="E" class="text-emerald-600"><span>E. jumlah kata dalam ayat</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 10 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">10. Ayat QS. Al-Baqarah 222 dijelaskan dengan konteks bahwa sebagian orang pada masa itu...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q10" value="A" required class="text-emerald-600"><span>A. menolak seluruh ajaran Islam</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q10" value="B" class="text-emerald-600"><span>B. menjauhi perempuan haid secara berlebihan dalam pergaulan sehari-hari</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q10" value="C" class="text-emerald-600"><span>C. tidak mengenal pernikahan</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q10" value="D" class="text-emerald-600"><span>D. melarang perempuan keluar rumah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q10" value="E" class="text-emerald-600"><span>E. menolak berbicara dengan Nabi</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 11 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">11. Contoh ayat yang berawal dari kasus individual tetapi hukumnya berlaku umum adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q11" value="A" required class="text-emerald-600"><span>A. QS. Al-Mujadilah 1-4 tentang zihar</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q11" value="B" class="text-emerald-600"><span>B. QS. Al-Ikhlas</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q11" value="C" class="text-emerald-600"><span>C. QS. Al-Fatihah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q11" value="D" class="text-emerald-600"><span>D. QS. Al-Kafirun</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q11" value="E" class="text-emerald-600"><span>E. QS. Al-Falaq</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 12 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">12. Arti kaidah <em>al-‘ibrah bi ‘umum al-lafz la bi khusus al-sabab</em> adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q12" value="A" required class="text-emerald-600"><span>A. yang dipegang adalah kekhususan sebab turun, bukan keumuman redaksi</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q12" value="B" class="text-emerald-600"><span>B. yang dipegang adalah keumuman redaksi ayat, bukan kekhususan sebab turun</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q12" value="C" class="text-emerald-600"><span>C. sebab turun tidak penting sama sekali</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q12" value="D" class="text-emerald-600"><span>D. ayat hanya berlaku bagi orang yang menjadi sebab turunnya</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q12" value="E" class="text-emerald-600"><span>E. redaksi ayat selalu mengikuti urutan turunnya</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 13 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">13. Kesalahan yang dapat dicegah oleh kaidah tersebut adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q13" value="A" required class="text-emerald-600"><span>A. menganggap ayat hanya berlaku bagi orang di masa turunnya</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q13" value="B" class="text-emerald-600"><span>B. menganggap semua ayat memiliki konteks</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q13" value="C" class="text-emerald-600"><span>C. menganggap Al-Qur’an diturunkan sekaligus</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q13" value="D" class="text-emerald-600"><span>D. menganggap semua surah Makki</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q13" value="E" class="text-emerald-600"><span>E. menganggap Nabi tidak pernah ditanya</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 14 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">14. Sikap yang paling tepat ketika menemukan kutipan “sebab turun” ayat di media sosial tanpa sumber adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q14" value="A" required class="text-emerald-600"><span>A. langsung membagikannya karena terdengar meyakinkan</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q14" value="B" class="text-emerald-600"><span>B. menerimanya jika banyak yang menyebarkan</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q14" value="C" class="text-emerald-600"><span>C. memeriksa sumber dan kualitas riwayatnya sebelum memakainya</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q14" value="D" class="text-emerald-600"><span>D. mengabaikan seluruh konteks ayat</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q14" value="E" class="text-emerald-600"><span>E. mengganti riwayat itu dengan pendapat sendiri</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Flexible Navigation & Submit Buttons -->
+                    <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="switchTab(2)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Kembali ke Materi Tertulis</span>
+                        </button>
+
+                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                            <button type="submit" id="btn-submit-quiz" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-check-double"></i>
+                                <span>Kirim & Nilai Kuis</span>
+                            </button>
+                            <button type="button" id="btn-next-from-quiz" onclick="unlockNextStep(3)" class="hidden w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition items-center justify-center gap-2">
+                                <span>Lanjut ke Tugas Esai</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Essay Form with 300-Word Minimum Validation -->
+        <section id="section-4" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">C. Soal Esai Singkat • Pertemuan 3</span>
+                    <h2 class="text-2xl font-bold text-slate-800 mt-1">Analisis Konteks Makki-Madani dan Asbab al-Nuzul</h2>
+                    <div class="flex flex-wrap gap-3 text-xs text-slate-600 mt-2">
+                        <span class="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded"><strong>Panjang:</strong> Masing-masing sekitar 100–150 kata (Minimal 300 kata total)</span>
+                        <span class="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded"><strong>Bahasa:</strong> Bahasa Indonesia (kata-kata sendiri)</span>
+                    </div>
+                </div>
+
+                <!-- Essay Instructions & Rubric -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 text-sm">
+                    <div class="lg:col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-3">
+                        <div>
+                            <h3 class="font-bold text-slate-900 mb-1.5">Pertanyaan Tugas Esai (Jawablah dengan bahasa sendiri, masing-masing sekitar 100–150 kata):</h3>
+                            <ol class="list-decimal list-inside text-slate-800 space-y-2 pl-1">
+                                <li><strong>Soal 1.</strong> Jelaskan perbedaan antara ilmu Makki-Madani dan ilmu <em>asbab al-nuzul</em>. Berikan satu contoh untuk memperjelas perbedaannya.</li>
+                                <li><strong>Soal 2.</strong> Pilih satu ayat dari contoh dalam materi (QS. Al-Baqarah 222, QS. Al-Mujadilah 1–4, atau QS. ‘Abasa 1–10). Jelaskan konteks turunnya dan bagaimana konteks tersebut mengubah cara Anda membaca ayat itu.</li>
+                                <li><strong>Soal 3.</strong> Seseorang berkata, “Ayat itu turun untuk satu orang di masa Nabi, jadi tidak berlaku untuk kita.” Tanggapi pernyataan tersebut dengan menggunakan kaidah <em>al-‘ibrah bi ‘umum al-lafz la bi khusus al-sabab</em>.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Rubric Box -->
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-emerald-900 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-clipboard-check text-emerald-700"></i>
+                                <span>Pedoman Penilaian (Skor 0–4 per Kriteria)</span>
+                            </h3>
+                            <table class="w-full text-xs text-left border-collapse border border-emerald-300 bg-white">
+                                <thead class="bg-emerald-100 text-emerald-950 font-semibold">
+                                    <tr>
+                                        <th class="p-2 border border-emerald-300">Kriteria</th>
+                                        <th class="p-2 border border-emerald-300 text-center">Skor Maks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="p-2 border border-emerald-200">Ketepatan konsep (akurat dan lengkap)</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">4</td>
+                                    </tr>
+                                    <tr class="bg-emerald-50/40">
+                                        <td class="p-2 border border-emerald-200">Penggunaan contoh (tepat dan dijelaskan relevansinya)</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">4</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 border border-emerald-200">Kejelasan penalaran (alur logis dan meyakinkan)</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">4</td>
+                                    </tr>
+                                    <tr class="bg-emerald-50/40">
+                                        <td class="p-2 border border-emerald-200">Bahasa dan keringkasan (jelas, ringkas, bahasa sendiri)</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">4</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-[11px] text-emerald-800 mt-3 italic">Berkas PDF laporan Anda akan dinamai otomatis menggunakan Nama Mahasiswa.</p>
+                    </div>
+                </div>
+
+                <!-- Word Count Warning Box -->
+                <div id="essay-warning-box" class="mb-4 p-3 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base"></i>
+                    <span>Syarat Panjang Esai: <strong>Minimal 300 kata</strong> (masing-masing soal sekitar 100–150 kata). Tombol simpan akan aktif setelah minimal 300 kata terpenuhi.</span>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <label for="input-essay" class="text-xs font-semibold text-slate-700">Lembar Jawaban Esai Singkat (Tuliskan Jawaban Soal 1, 2, dan 3):</label>
+                        <span id="essay-word-counter" class="text-xs font-bold text-amber-600">0 / 300–450 Kata</span>
+                    </div>
+
+                    <textarea id="input-essay" oninput="validateEssayWords()" rows="15" placeholder="Jawaban Soal 1: ...&#10;&#10;Jawaban Soal 2: ...&#10;&#10;Jawaban Soal 3: ..." class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none text-slate-800 leading-relaxed text-sm"></textarea>
+
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
+                        <span id="essay-status-msg" class="text-xs text-rose-600 font-medium">Panjang esai belum mencapai 300 kata.</span>
+                    </div>
+
+                    <!-- Flexible Navigation Buttons -->
+                    <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="switchTab(3)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Kembali ke Kuis MCQ</span>
+                        </button>
+                        <button type="button" id="btn-submit-essay" disabled onclick="submitEssay()" class="w-full sm:w-auto bg-slate-300 text-slate-500 font-semibold px-6 py-3 rounded-lg shadow-none cursor-not-allowed transition flex items-center justify-center gap-2">
+                            <span>Simpan & Lanjut ke Laporan PDF</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: PDF Export & Submission Area -->
+        <section id="section-5" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="text-center max-w-xl mx-auto mb-8">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Unduh Laporan & Penyerahan</h2>
+                    <p class="text-sm text-slate-600 mt-1">Seluruh tahapan pembelajaran Pertemuan 3 telah diselesaikan. Unduh berkas PDF laporan Anda (dengan nama file menggunakan nama mahasiswa).</p>
+                </div>
+
+                <!-- Printable Area Target for html2pdf.js -->
+                <div class="bg-slate-100 p-4 sm:p-8 rounded-xl border border-slate-300 mb-6">
+                    <div id="pdf-report-content" class="bg-white p-8 rounded shadow-sm text-slate-800 space-y-6">
+                        <!-- PDF Header -->
+                        <div class="border-b-2 border-emerald-800 pb-4 flex justify-between items-start pdf-avoid-break">
+                            <div>
+                                <h3 class="text-xl font-bold text-emerald-900 uppercase tracking-tight">Laporan Lembar Kerja Mahasiswa</h3>
+                                <p class="text-xs text-slate-600 font-semibold">Mata Kuliah Al-Qur'an Hadis — Pertemuan 3: Makki-Madani dan Asbab al-Nuzul</p>
+                                <p class="text-xs text-slate-500">Program Studi Ilmu Hadis</p>
+                            </div>
+                            <div class="text-right text-xs text-slate-500">
+                                <p>Tanggal Submit:</p>
+                                <p class="font-semibold text-slate-700" id="pdf-date">-</p>
+                            </div>
+                        </div>
+
+                        <!-- Identity Summary Table -->
+                        <div class="pdf-avoid-break">
+                            <h4 class="text-xs font-bold uppercase text-emerald-800 tracking-wider mb-2">Identitas Mahasiswa</h4>
+                            <table class="w-full text-xs border border-slate-200">
+                                <tr class="border-b bg-slate-50">
+                                    <td class="p-2 font-semibold w-1/4 border-r">Nama Lengkap</td>
+                                    <td class="p-2 font-medium text-slate-800" id="pdf-nama">-</td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="p-2 font-semibold border-r">Program Studi</td>
+                                    <td class="p-2 font-medium text-slate-800" id="pdf-prodi">-</td>
+                                </tr>
+                                <tr class="border-b bg-slate-50">
+                                    <td class="p-2 font-semibold border-r">Kelas</td>
+                                    <td class="p-2 font-medium text-slate-800" id="pdf-kelas">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-semibold border-r">NIM</td>
+                                    <td class="p-2 font-medium text-slate-800" id="pdf-nim">-</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Quiz Result Summary -->
+                        <div class="pdf-avoid-break">
+                            <h4 class="text-xs font-bold uppercase text-emerald-800 tracking-wider mb-2">Hasil Evaluasi Kuis MCQ (14 Soal)</h4>
+                            <div class="p-3 bg-emerald-50 rounded border border-emerald-200 text-xs flex justify-between items-center">
+                                <span>Nilai Akhir Kuis Pilihan Ganda (Skor Tertinggi):</span>
+                                <span id="pdf-quiz-score" class="font-bold text-sm text-emerald-900">0 / 100</span>
+                            </div>
+                        </div>
+
+                        <!-- Essay Content -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2 pdf-avoid-break">
+                                <h4 class="text-xs font-bold uppercase text-emerald-800 tracking-wider">Jawaban Tugas Esai Singkat</h4>
+                                <span id="pdf-essay-wordcount" class="text-[11px] font-semibold text-slate-500">0 kata</span>
+                            </div>
+                            <div class="p-4 border border-slate-200 rounded text-xs leading-relaxed text-slate-800 bg-slate-50 whitespace-pre-wrap break-words overflow-visible" id="pdf-essay-body">
+                                -
+                            </div>
+                        </div>
+
+                        <!-- Footer / Branding -->
+                        <div class="border-t border-slate-200 pt-4 flex justify-between items-center text-[10px] text-slate-500 pdf-avoid-break">
+                            <span>Sistem Perkuliahan Digital Al-Qur'an Hadis</span>
+                            <span class="font-bold text-slate-700">Copyright © @ulfiputrasany</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action & Navigation Buttons -->
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
+                    <button type="button" onclick="switchTab(4)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Kembali ke Tugas Esai</span>
+                    </button>
+
+                    <button type="button" onclick="downloadPDF()" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-7 py-3.5 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        <span>Unduh Laporan PDF</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Branding -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 text-center border-t border-slate-800 no-print">
+        <p>Copyright © @ulfiputrasany • Mata Kuliah Al-Qur'an Hadis</p>
+    </footer>
+
+    <!-- Application Logic Javascript -->
+    <script>
+        // Global Application State (5 Steps Total)
+        const state = {
+            student: { nama: '', prodi: '', kelas: '', nim: '' },
+            completedSteps: [1],
+            currentStep: 1,
+            totalSteps: 5,
+            quizAttempts: 0,
+            maxAttempts: 2,
+            highestScore: 0,
+            quizAnswers: {
+                q1: 'B', q2: 'B', q3: 'C', q4: 'B', q5: 'B',
+                q6: 'B', q7: 'B', q8: 'B', q9: 'A', q10: 'B',
+                q11: 'A', q12: 'B', q13: 'A', q14: 'C'
+            },
+            userEssay: ''
+        };
+
+        // Flexible Tab Navigation (Allows jumping back and forth across all unlocked tabs)
+        function switchTab(step) {
+            if (!state.completedSteps.includes(step)) return;
+
+            state.currentStep = step;
+            for (let i = 1; i <= state.totalSteps; i++) {
+                const sec = document.getElementById(`section-${i}`);
+                const tab = document.getElementById(`tab-${i}`);
+                
+                if (i === step) {
+                    sec.classList.remove('hidden');
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('text-slate-400', 'text-slate-700');
+                } else {
+                    sec.classList.add('hidden');
+                    tab.classList.remove('tab-active');
+                    if (state.completedSteps.includes(i)) {
+                        tab.classList.add('text-slate-700', 'hover:text-emerald-700', 'hover:bg-emerald-50/50', 'cursor-pointer');
+                        tab.classList.remove('text-slate-400');
+                    }
+                }
+            }
+
+            if (step === 5) {
+                syncReportData();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Unlock Next Step
+        function unlockNextStep(currentStep) {
+            const nextStep = currentStep + 1;
+            if (nextStep <= state.totalSteps && !state.completedSteps.includes(nextStep)) {
+                state.completedSteps.push(nextStep);
+            }
+
+            const nextTab = document.getElementById(`tab-${nextStep}`);
+            const nextNum = document.getElementById(`num-${nextStep}`);
+            if (nextTab) {
+                nextTab.classList.remove('step-locked', 'text-slate-400');
+                nextTab.classList.add('text-slate-700', 'hover:text-emerald-700', 'hover:bg-emerald-50/50', 'cursor-pointer');
+                nextNum.classList.remove('bg-slate-200', 'text-slate-600');
+                nextNum.classList.add('bg-emerald-100', 'text-emerald-800');
+            }
+
+            switchTab(nextStep);
+        }
+
+        // Sync Latest Student Data, Quiz Score & Essay to PDF Preview
+        function syncReportData() {
+            const essayEl = document.getElementById('input-essay');
+            if (essayEl) {
+                const text = essayEl.value.trim();
+                const words = text ? text.split(/\s+/).filter(word => word.length > 0) : [];
+                state.userEssay = text;
+                document.getElementById('pdf-essay-wordcount').innerText = `${words.length} kata`;
+                document.getElementById('pdf-essay-body').innerText = text || '-';
+            }
+            document.getElementById('pdf-quiz-score').innerText = `${state.highestScore} / 100`;
+        }
+
+        // Step 1: Submit Identity Gate
+        function submitIdentity(event) {
+            event.preventDefault();
+            const nama = document.getElementById('input-nama').value.trim();
+            const prodi = document.getElementById('input-prodi').value;
+            const kelas = document.getElementById('input-kelas').value;
+            const nim = document.getElementById('input-nim').value.trim();
+
+            if (!nama || !prodi || !kelas || !nim) {
+                alert('Mohon lengkapi seluruh data identitas.');
+                return;
+            }
+
+            state.student = { nama, prodi, kelas, nim };
+
+            // Update UI Badges & PDF fields
+            document.getElementById('badge-name').innerText = nama;
+            document.getElementById('badge-prodi').innerText = prodi;
+            document.getElementById('badge-class').innerText = `Kelas ${kelas}`;
+            document.getElementById('badge-nim').innerText = nim;
+            document.getElementById('student-badge').classList.remove('hidden');
+
+            document.getElementById('pdf-nama').innerText = nama;
+            document.getElementById('pdf-prodi').innerText = prodi;
+            document.getElementById('pdf-kelas').innerText = `Kelas ${kelas}`;
+            document.getElementById('pdf-nim').innerText = nim;
+            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('id-ID', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            unlockNextStep(1);
+        }
+
+        // Step 3: Submit & Autograde MCQ Quiz (14 Questions)
+        function submitQuiz(event) {
+            event.preventDefault();
+
+            if (state.quizAttempts >= state.maxAttempts) {
+                alert('Anda telah mencapai batas maksimal percobaan kuis (2 kali).');
+                return;
+            }
+
+            const totalQuestions = Object.keys(state.quizAnswers).length;
+            const formData = new FormData(document.getElementById('quiz-form'));
+            let correctCount = 0;
+
+            for (let [question, answer] of formData.entries()) {
+                if (state.quizAnswers[question] === answer) {
+                    correctCount++;
+                }
+            }
+
+            const currentScore = Math.round((correctCount / totalQuestions) * 100);
+            state.quizAttempts++;
+
+            if (currentScore > state.highestScore) {
+                state.highestScore = currentScore;
+            }
+
+            // Update Result UI Box
+            document.getElementById('quiz-result-box').classList.remove('hidden');
+            document.getElementById('quiz-score-text').innerHTML = `Percobaan ke-${state.quizAttempts}: <strong>${currentScore} / 100</strong> (${correctCount} dari ${totalQuestions} soal benar).`;
+            document.getElementById('quiz-highest-text').innerText = `Skor Tertinggi Disimpan: ${state.highestScore} / 100`;
+            document.getElementById('pdf-quiz-score').innerText = `${state.highestScore} / 100`;
+
+            const attemptsLeft = state.maxAttempts - state.quizAttempts;
+            document.getElementById('attempts-left-badge').innerText = `${attemptsLeft} dari ${state.maxAttempts}`;
+
+            // Handle Retake vs Next Buttons
+            const btnSubmit = document.getElementById('btn-submit-quiz');
+            const btnNext = document.getElementById('btn-next-from-quiz');
+            const btnRetake = document.getElementById('btn-retake-quiz');
+
+            btnSubmit.classList.add('hidden');
+            btnNext.classList.remove('hidden');
+            btnNext.classList.add('flex');
+
+            if (attemptsLeft > 0) {
+                btnRetake.classList.remove('hidden');
+            } else {
+                btnRetake.classList.add('hidden');
+            }
+        }
+
+        // Retake MCQ Test
+        function retakeQuiz() {
+            if (state.quizAttempts >= state.maxAttempts) return;
+
+            document.getElementById('quiz-form').reset();
+            document.getElementById('quiz-result-box').classList.add('hidden');
+            document.getElementById('btn-submit-quiz').classList.remove('hidden');
+            document.getElementById('btn-next-from-quiz').classList.add('hidden');
+            document.getElementById('btn-next-from-quiz').classList.remove('flex');
+            window.scrollTo({ top: document.getElementById('section-3').offsetTop - 80, behavior: 'smooth' });
+        }
+
+        // Step 4: Live Essay Word Counter & 300-Word Minimum Validation (3 x ~100-150 words)
+        function validateEssayWords() {
+            const text = document.getElementById('input-essay').value.trim();
+            const words = text ? text.split(/\s+/).filter(word => word.length > 0) : [];
+            const count = words.length;
+
+            const counterEl = document.getElementById('essay-word-counter');
+            const statusMsg = document.getElementById('essay-status-msg');
+            const btnSubmit = document.getElementById('btn-submit-essay');
+            const warningBox = document.getElementById('essay-warning-box');
+
+            counterEl.innerText = `${count} / 300–450 Kata`;
+
+            if (count >= 300) {
+                counterEl.className = "text-xs font-bold text-emerald-700";
+                if (count <= 500) {
+                    statusMsg.innerText = "Panjang esai ideal (memenuhi anjuran 100–150 kata per soal) dan siap disimpan!";
+                    statusMsg.className = "text-xs text-emerald-700 font-semibold";
+                } else {
+                    statusMsg.innerText = `Syarat minimal terpenuhi (${count} kata).`;
+                    statusMsg.className = "text-xs text-emerald-700 font-semibold";
+                }
+                
+                btnSubmit.disabled = false;
+                btnSubmit.className = "w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2 cursor-pointer";
+                warningBox.classList.add('hidden');
+            } else {
+                counterEl.className = "text-xs font-bold text-amber-600";
+                statusMsg.innerText = `Panjang esai belum mencapai 300 kata (Kurang ${300 - count} kata).`;
+                statusMsg.className = "text-xs text-rose-600 font-medium";
+
+                btnSubmit.disabled = true;
+                btnSubmit.className = "w-full sm:w-auto bg-slate-300 text-slate-500 font-semibold px-6 py-3 rounded-lg shadow-none cursor-not-allowed transition flex items-center justify-center gap-2";
+                warningBox.classList.remove('hidden');
+            }
+        }
+
+        // Submit Essay
+        function submitEssay() {
+            syncReportData();
+            unlockNextStep(4);
+        }
+
+        // Step 5: PDF Generation via html2pdf.js (Menggunakan Nama Mahasiswa, BUKAN NIM)
+        function downloadPDF() {
+            syncReportData();
+            const element = document.getElementById('pdf-report-content');
+            const safeStudentName = (state.student.nama || 'Mahasiswa').replace(/[^a-zA-Z0-9\s]/g, '').trim().replace(/\s+/g, '_');
+            const opt = {
+                margin:       0.5,
+                filename:     `Laporan_Qurhadis_Pertemuan3_${safeStudentName}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
 </body>
 </html>
