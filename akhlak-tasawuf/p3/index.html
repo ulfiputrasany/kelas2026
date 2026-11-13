@@ -1,22 +1,1325 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Akhlak Tasawuf — Pertemuan 3</title>
-<style>
-  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background:#f4f6f5; color:#12281F; margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
-  .card { background:#fff; border-radius:16px; padding:48px 40px; max-width:480px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
-  .tag { display:inline-block; background:#E8F1EC; color:#1F6F54; font-size:13px; font-weight:600; padding:4px 12px; border-radius:999px; margin-bottom:16px; }
-  h1 { font-size:22px; margin:0 0 8px; color:#0B3D2E; }
-  p { color:#5A6B63; font-size:15px; line-height:1.6; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akhlak Tasawuf - Pertemuan 3: Klasifikasi Akhlak dalam Al-Qur'an | UIN Salatiga</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- jsPDF CDN (Vector PDF Generator) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-locked { opacity: 0.45; pointer-events: none; cursor: not-allowed; }
+        .tab-active { border-bottom: 3px solid #059669 !important; color: #059669 !important; font-weight: 700 !important; background-color: #ecfdf5; }
+        .arabic-text { font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif; font-size: 1.2rem; direction: rtl; }
+    </style>
 </head>
-<body>
-  <div class="card">
-    <span class="tag">Pertemuan 3</span>
-    <h1>Akhlak Tasawuf</h1>
-    <p>Materi untuk pertemuan ini sedang disiapkan. Silakan kembali lagi nanti.</p>
-  </div>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Branding Bar -->
+    <header class="bg-emerald-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-200">Prodi Ilmu Al-Qur'an dan Tafsir • UIN Salatiga</span>
+                <h1 class="text-xl sm:text-2xl font-bold">Akhlak Tasawuf — Pertemuan 3</h1>
+                <p class="text-xs text-emerald-100">Klasifikasi Akhlak dalam Al-Qur’an: Akhlak Mahmudah, Akhlak Madzmumah, dan Keteladanan Nabi</p>
+            </div>
+            <div id="student-badge" class="hidden bg-emerald-900/80 border border-emerald-600 rounded-lg px-3 py-1.5 text-right text-xs">
+                <p class="font-semibold text-emerald-100" id="badge-name">-</p>
+                <p class="text-emerald-300"><span id="badge-class">-</span> | NIM: <span id="badge-nim">-</span></p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Stepper Tabs -->
+    <nav class="bg-white border-b border-slate-200 shadow-sm sticky top-[72px] z-40 overflow-x-auto">
+        <div class="max-w-6xl mx-auto flex justify-between min-w-[640px] px-4">
+            <button type="button" onclick="switchTab(1)" id="tab-1" class="tab-active py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent transition-colors cursor-pointer">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs font-bold" id="num-1">1</span> Identitas
+            </button>
+            <button type="button" onclick="switchTab(2)" id="tab-2" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-2">2</span> Materi Tertulis
+            </button>
+            <button type="button" onclick="switchTab(3)" id="tab-3" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-3">3</span> Kuis MCQ
+            </button>
+            <button type="button" onclick="switchTab(4)" id="tab-4" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-4">4</span> Tugas Esai
+            </button>
+            <button type="button" onclick="switchTab(5)" id="tab-5" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-5">5</span> Laporan PDF
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-8 flex-grow">
+
+        <!-- SECTION 1: Student Identity Gate -->
+        <section id="section-1" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+            <div class="max-w-md mx-auto">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Registrasi Mahasiswa</h2>
+                    <p class="text-slate-600 text-sm mt-1">Isi data diri lengkap sebelum memulai perkuliahan interaktif Akhlak Tasawuf.</p>
+                </div>
+                <form id="form-identity" onsubmit="submitIdentity(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+                        <input type="text" id="input-nama" required placeholder="Contoh: Ahmad Fauzi" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Kelas</label>
+                        <select id="input-kelas" required class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                            <option value="">-- Pilih Kelas --</option>
+                            <option value="A">Kelas A</option>
+                            <option value="B">Kelas B</option>
+                            <option value="C">Kelas C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">NIM (Nomor Induk Mahasiswa)</label>
+                        <input type="text" id="input-nim" required placeholder="Contoh: 1012023001" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-3 rounded-lg shadow-md transition duration-200 flex items-center justify-center gap-2">
+                        <span>Buka Materi Perkuliahan</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Complete Written Materials -->
+        <section id="section-2" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Materi Tertulis Perkuliahan • Pertemuan 3</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">Klasifikasi Akhlak dalam Al-Qur’an</h2>
+                    <p class="text-sm text-slate-600">Akhlak Mahmudah, Akhlak Madzmumah, dan Keteladanan Nabi • Akhlak Tasawuf | Prodi Ilmu Al-Qur’an dan Tafsir</p>
+                </div>
+
+                <div class="prose max-w-none text-slate-800 space-y-8 leading-relaxed">
+
+                    <!-- Capaian Pembelajaran -->
+                    <div class="bg-emerald-50 border-l-4 border-emerald-600 p-5 rounded-r-lg">
+                        <h3 class="text-emerald-900 font-bold text-lg mb-2">Capaian Pembelajaran</h3>
+                        <p class="text-sm text-emerald-950 mb-2">Setelah mempelajari materi ini, mahasiswa mampu:</p>
+                        <ol class="list-decimal list-inside text-sm sm:text-base text-emerald-950 space-y-1.5 pl-1">
+                            <li>Membedakan akhlak mahmudah (terpuji) dan akhlak madzmumah (tercela).</li>
+                            <li>Menyebutkan contoh akhlak mahmudah dan madzmumah beserta dalilnya dari Al-Qur’an.</li>
+                            <li>Menjelaskan posisi Nabi Muhammad ﷺ sebagai teladan akhlak.</li>
+                        </ol>
+                    </div>
+
+                    <!-- Pendahuluan -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">Pendahuluan</h3>
+                        <p class="mb-3">Pada pertemuan sebelumnya kita belajar bahwa akhlak adalah sifat yang tertanam dalam jiwa dan melahirkan perbuatan dengan mudah. Pertanyaan berikutnya: sifat apa saja yang termasuk baik, dan sifat apa saja yang termasuk buruk?</p>
+                        <p>Al-Qur’an tidak menyajikan daftar akhlak dalam satu bab khusus. Nilai-nilai akhlak tersebar di banyak surah, disampaikan lewat perintah, larangan, pujian, celaan, dan kisah para nabi. Karena itu, para ulama menyusun klasifikasi agar akhlak mudah dipelajari. Klasifikasi paling dasar membagi akhlak menjadi dua: mahmudah dan madzmumah.</p>
+                    </div>
+
+                    <!-- A. Dua Kategori Besar Akhlak -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">A. Dua Kategori Besar Akhlak</h3>
+                        <div class="overflow-x-auto my-4">
+                            <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                                <thead class="bg-slate-100 text-slate-800 font-semibold border-b border-slate-300">
+                                    <tr>
+                                        <th class="p-3 border border-slate-300 w-1/5">Aspek</th>
+                                        <th class="p-3 border border-slate-300 text-emerald-900">Akhlak Mahmudah (الأخلاق المحمودة)</th>
+                                        <th class="p-3 border border-slate-300 text-rose-900">Akhlak Madzmumah (الأخلاق المذمومة)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-semibold bg-slate-50">Arti</td>
+                                        <td class="p-3 border border-slate-300">Akhlak terpuji</td>
+                                        <td class="p-3 border border-slate-300">Akhlak tercela</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-semibold bg-slate-50">Sikap Al-Qur’an</td>
+                                        <td class="p-3 border border-slate-300">Diperintahkan, dipuji, dijanjikan pahala</td>
+                                        <td class="p-3 border border-slate-300">Dilarang, dicela, diberi peringatan</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-semibold bg-slate-50">Dampak</td>
+                                        <td class="p-3 border border-slate-300">Menyucikan jiwa dan memperbaiki hubungan sosial</td>
+                                        <td class="p-3 border border-slate-300">Mengotori jiwa dan merusak hubungan sosial</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-200">
+                                        <td class="p-3 border border-slate-300 font-semibold bg-slate-50">Istilah lain</td>
+                                        <td class="p-3 border border-slate-300">Fadhilah (keutamaan)</td>
+                                        <td class="p-3 border border-slate-300">Radzilah (keburukan)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>Penjelasan ini berkaitan dengan gagasan al-Ghazali bahwa akhlak yang baik maupun buruk berpusat di dalam hati. Perbuatan lahiriah hanyalah cerminan dari kondisi batin.</p>
+                    </div>
+
+                    <!-- B. Akhlak Mahmudah dalam Al-Qur'an -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">B. Akhlak Mahmudah dalam Al-Qur’an</h3>
+                        <p class="mb-4">Berikut contoh-contoh pokok. Mahasiswa tidak perlu menghafal semuanya, tetapi perlu memahami satu ayat kunci untuk setiap sifat.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-emerald-900 text-base mb-1.5">1. Shidq (jujur)</h4>
+                                <p class="text-sm sm:text-base">Allah berfirman: <span class="arabic-text font-semibold text-slate-900 px-1">يَا أَيُّهَا الَّذِينَ آمَنُوا اتَّقُوا اللَّهَ وَكُونُوا مَعَ الصَّادِقِينَ</span> (QS. At-Taubah [9]: 119). Ayat ini menghubungkan takwa dengan kejujuran: orang beriman diperintahkan bersama orang-orang yang jujur.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-emerald-900 text-base mb-1.5">2. Amanah (dapat dipercaya)</h4>
+                                <p class="text-sm sm:text-base"><span class="arabic-text font-semibold text-slate-900 px-1">إِنَّ اللَّهَ يَأْمُرُكُمْ أَن تُؤَدُّوا الْأَمَانَاتِ إِلَىٰ أَهْلِهَا</span> (QS. An-Nisa’ [4]: 58). Amanah mencakup harta, jabatan, rahasia, hingga tanggung jawab ilmu.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-emerald-900 text-base mb-1.5">3. ‘Adl dan Ihsan (adil dan berbuat baik)</h4>
+                                <p class="text-sm sm:text-base"><span class="arabic-text font-semibold text-slate-900 px-1">إِنَّ اللَّهَ يَأْمُرُ بِالْعَدْلِ وَالْإِحْسَانِ</span> (QS. An-Nahl [16]: 90). Adil berarti memberi hak sesuai porsinya. Ihsan berarti berbuat lebih baik dari sekadar kewajiban.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-emerald-900 text-base mb-1.5">4. Sabar</h4>
+                                <p class="text-sm sm:text-base"><span class="arabic-text font-semibold text-slate-900 px-1">إِنَّ اللَّهَ مَعَ الصَّابِرِينَ</span> (QS. Al-Baqarah [2]: 153). Sabar bukan pasif. Sabar adalah keteguhan dalam ketaatan, dalam menjauhi maksiat, dan dalam menghadapi musibah.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-emerald-900 text-base mb-1.5">5. Syukur</h4>
+                                <p class="text-sm sm:text-base"><span class="arabic-text font-semibold text-slate-900 px-1">لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ</span> (QS. Ibrahim [14]: 7). Syukur adalah mengakui nikmat dan menggunakannya dalam kebaikan.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-emerald-900 text-base mb-1.5">6. Tawadhu’ (rendah hati)</h4>
+                                <p class="text-sm sm:text-base">Sifat hamba-hamba Allah yang disebut dalam QS. Al-Furqan [25]: 63 adalah berjalan di bumi dengan rendah hati. Ayat ini juga menjadi lawan langsung dari sifat sombong.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-slate-50 border border-slate-200">
+                                <h4 class="font-bold text-emerald-900 text-base mb-1.5">7. ‘Afw (pemaaf)</h4>
+                                <p class="text-sm sm:text-base">Orang bertakwa digambarkan sebagai orang yang menahan amarah dan memaafkan kesalahan orang lain (QS. Ali ‘Imran [3]: 134).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- C. Akhlak Madzmumah dalam Al-Qur'an -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">C. Akhlak Madzmumah dalam Al-Qur’an</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="p-4 rounded-lg bg-rose-50/40 border border-rose-200">
+                                <h4 class="font-bold text-rose-900 text-base mb-1.5">1. Kidzb (dusta)</h4>
+                                <p class="text-sm sm:text-base">Al-Qur’an memperingatkan agar menjauhi perkataan dusta (<em>qaul az-zur</em>), sebagaimana disebut dalam QS. Al-Hajj [22]: 30.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-rose-50/40 border border-rose-200">
+                                <h4 class="font-bold text-rose-900 text-base mb-1.5">2. Kibr (sombong)</h4>
+                                <p class="text-sm sm:text-base"><span class="arabic-text font-semibold text-slate-900 px-1">وَلَا تُصَعِّرْ خَدَّكَ لِلنَّاسِ وَلَا تَمْشِ فِي الْأَرْضِ مَرَحًا</span> (QS. Luqman [31]: 18). Nasihat Luqman kepada anaknya ini melarang memalingkan wajah karena sombong dan berjalan dengan angkuh.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-rose-50/40 border border-rose-200">
+                                <h4 class="font-bold text-rose-900 text-base mb-1.5">3. Hasad (dengki)</h4>
+                                <p class="text-sm sm:text-base">Perlindungan dari kejahatan orang yang dengki disebutkan dalam QS. Al-Falaq [113]: 5. Hasad adalah tidak suka melihat orang lain mendapat nikmat.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-rose-50/40 border border-rose-200">
+                                <h4 class="font-bold text-rose-900 text-base mb-1.5">4. Ghibah (menggunjing)</h4>
+                                <p class="text-sm sm:text-base"><span class="arabic-text font-semibold text-slate-900 px-1">وَلَا يَغْتَب بَّعْضُكُم بَعْضًا</span> (QS. Al-Hujurat [49]: 12). Al-Qur’an menggambarkan ghibah dengan perumpamaan yang keras agar kita merasakan betapa buruknya.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-rose-50/40 border border-rose-200">
+                                <h4 class="font-bold text-rose-900 text-base mb-1.5">5. Bukhl dan Israf (kikir dan boros)</h4>
+                                <p class="text-sm sm:text-base">Kikir dicela dalam QS. Ali ‘Imran [3]: 180. Pemborosan dilarang dalam <span class="arabic-text font-semibold text-slate-900 px-1">وَلَا تُسْرِفُوا</span> (QS. Al-A’raf [7]: 31). Dua sifat ini adalah dua ujung ekstrem, sedangkan dermawan berada di jalan tengah (<em>wasath</em>), seperti yang kita bahas di pertemuan 2.</p>
+                            </div>
+
+                            <div class="p-4 rounded-lg bg-rose-50/40 border border-rose-200">
+                                <h4 class="font-bold text-rose-900 text-base mb-1.5">6. Riya’ (pamer)</h4>
+                                <p class="text-sm sm:text-base">Perbuatan ibadah yang dilakukan agar dilihat orang dicela dalam QS. Al-Ma’un [107]: 4-6 dan QS. Al-Baqarah [2]: 264. Riya’ berbahaya karena merusak keikhlasan.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- D. Pola yang Perlu Diperhatikan -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">D. Pola yang Perlu Diperhatikan</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <p class="font-semibold text-slate-900 mb-2">1. Banyak akhlak mahmudah punya lawan madzmumah.</p>
+                                <div class="overflow-x-auto my-3">
+                                    <table class="w-full text-sm text-left border-collapse border border-slate-300">
+                                        <thead class="bg-slate-100 text-slate-800 font-semibold border-b border-slate-300">
+                                            <tr>
+                                                <th class="p-3 border border-slate-300 text-emerald-900">Mahmudah</th>
+                                                <th class="p-3 border border-slate-300 text-rose-900">Lawan (Madzmumah)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="border-b border-slate-200">
+                                                <td class="p-3 border border-slate-300 font-medium">Shidq (jujur)</td>
+                                                <td class="p-3 border border-slate-300">Kidzb (dusta)</td>
+                                            </tr>
+                                            <tr class="border-b border-slate-200 bg-slate-50">
+                                                <td class="p-3 border border-slate-300 font-medium">Tawadhu’ (rendah hati)</td>
+                                                <td class="p-3 border border-slate-300">Kibr (sombong)</td>
+                                            </tr>
+                                            <tr class="border-b border-slate-200">
+                                                <td class="p-3 border border-slate-300 font-medium">Ikhlas</td>
+                                                <td class="p-3 border border-slate-300">Riya’ (pamer)</td>
+                                            </tr>
+                                            <tr class="border-b border-slate-200 bg-slate-50">
+                                                <td class="p-3 border border-slate-300 font-medium">Qana’ah dan syukur</td>
+                                                <td class="p-3 border border-slate-300">Hasad dan kufur nikmat</td>
+                                            </tr>
+                                            <tr class="border-b border-slate-200">
+                                                <td class="p-3 border border-slate-300 font-medium">Dermawan</td>
+                                                <td class="p-3 border border-slate-300">Bukhl (kikir) dan israf (boros)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <p><strong>2. Mahasiswa Tafsir perlu berhati-hati dengan istilah.</strong> Satu nilai akhlak bisa diungkapkan lewat berbagai kata dalam Al-Qur’an. Kajian akhlak Qur’ani karena itu tidak cukup dengan mencari satu kata, tetapi perlu mengumpulkan ayat-ayat yang semakna (pendekatan tematik atau <em>maudhu’i</em>).</p>
+
+                            <p><strong>3. Akhlak berpusat di hati.</strong> Sifat seperti riya’, hasad, dan kibr tidak tampak oleh mata. Karena itu pendidikan akhlak selalu menyentuh dimensi batin, yang akan kita dalami di pertemuan 4 melalui konsep jiwa dan <em>tazkiyat an-nafs</em>.</p>
+                        </div>
+                    </div>
+
+                    <!-- E. Keteladanan Nabi Muhammad ﷺ -->
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-3">E. Keteladanan Nabi Muhammad ﷺ</h3>
+                        <p class="mb-4">Setelah mengenal baik dan buruk, kita perlu contoh nyata. Al-Qur’an menjawabnya lewat figur Rasulullah ﷺ.</p>
+
+                        <div class="space-y-4">
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-bold text-slate-900 mb-2">1. Dasar Al-Qur’an</h4>
+                                <ul class="list-disc list-inside space-y-2 text-sm sm:text-base">
+                                    <li><strong>QS. Al-Ahzab [33]: 21:</strong> <span class="arabic-text font-semibold text-slate-900 px-1">لَقَدْ كَانَ لَكُمْ فِي رَسُولِ اللَّهِ أُسْوَةٌ حَسَنَةٌ</span>. Nabi adalah teladan (<em>uswah hasanah</em>).</li>
+                                    <li><strong>QS. Al-Qalam [68]: 4:</strong> <span class="arabic-text font-semibold text-slate-900 px-1">وَإِنَّكَ لَعَلَىٰ خُلُقٍ عَظِيمٍ</span>. Pujian Allah atas akhlak agung Nabi.</li>
+                                    <li><strong>QS. Ali ‘Imran [3]: 159:</strong> <span class="arabic-text font-semibold text-slate-900 px-1">فَبِمَا رَحْمَةٍ مِّنَ اللَّهِ لِنتَ لَهُمْ</span>. Kelembutan Nabi membuat para sahabat tidak menjauh.</li>
+                                    <li><strong>QS. Al-Anbiya’ [21]: 107:</strong> <span class="arabic-text font-semibold text-slate-900 px-1">وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِّلْعَالَمِينَ</span>. Beliau diutus sebagai rahmat bagi seluruh alam.</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-bold text-slate-900 mb-2">2. Dasar Hadis</h4>
+                                <ul class="list-disc list-inside space-y-2 text-sm sm:text-base">
+                                    <li>Ketika ‘Aisyah <em>radhiyallahu ‘anha</em> ditanya tentang akhlak Nabi, beliau menjawab bahwa akhlak Nabi adalah Al-Qur’an (HR. Muslim). Artinya, Nabi menjalankan nilai-nilai Al-Qur’an dalam kehidupan nyata.</li>
+                                    <li>Nabi bersabda bahwa orang mukmin yang paling sempurna imannya adalah yang paling baik akhlaknya (HR. Abu Dawud dan at-Tirmidzi).</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                                <h4 class="font-bold text-slate-900 mb-2">3. Contoh Singkat Keteladanan</h4>
+                                <ul class="list-disc list-inside space-y-1.5 text-sm sm:text-base">
+                                    <li><strong>Jujur:</strong> sebelum kenabian, beliau dijuluki <em>al-Amin</em> (yang dipercaya).</li>
+                                    <li><strong>Pemaaf:</strong> beliau memaafkan penduduk Makkah saat Fathu Makkah, padahal sebelumnya mereka memusuhi beliau.</li>
+                                    <li><strong>Sabar dan penyayang:</strong> beliau tetap berdakwah dengan lembut walau mendapat gangguan.</li>
+                                    <li><strong>Rendah hati:</strong> beliau ikut bekerja bersama para sahabat dan menjahit sendiri pakaiannya.</li>
+                                </ul>
+                            </div>
+
+                            <p><strong>4. Mengapa Nabi menjadi teladan?</strong> Karena nilai akhlak tidak cukup dipahami lewat teori. Manusia perlu melihat contoh hidup agar nilai itu terasa mungkin dijalankan. Inilah perbedaan akhlak Islam dengan etika filsafat yang banyak berhenti pada teori.</p>
+                        </div>
+                    </div>
+
+                    <!-- F. Rangkuman, Kata Kunci & Bacaan Rujukan -->
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-5 space-y-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-emerald-900 mb-2">F. Rangkuman</h3>
+                            <ol class="list-decimal list-inside text-sm sm:text-base text-emerald-950 space-y-1.5">
+                                <li>Akhlak dibagi menjadi mahmudah (terpuji) dan madzmumah (tercela).</li>
+                                <li>Al-Qur’an memerintahkan sifat seperti jujur, amanah, adil, sabar, syukur, rendah hati, dan pemaaf, serta melarang dusta, sombong, dengki, ghibah, kikir, boros, dan riya’.</li>
+                                <li>Banyak akhlak mahmudah memiliki lawan madzmumah, dan keduanya berpusat di hati.</li>
+                                <li>Nabi Muhammad ﷺ adalah teladan utama akhlak (QS. Al-Ahzab [33]: 21 dan Al-Qalam [68]: 4).</li>
+                            </ol>
+                        </div>
+
+                        <div class="border-t border-emerald-200 pt-3">
+                            <h4 class="text-sm font-bold text-emerald-900 mb-2">Kata Kunci</h4>
+                            <div class="flex flex-wrap gap-2 text-xs">
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Mahmudah</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Madzmumah</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Shidq</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Amanah</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">‘Adl</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Ihsan</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Sabar</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Syukur</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Tawadhu’</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Kibr</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Hasad</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Ghibah</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Riya’</span>
+                                <span class="bg-white border border-emerald-300 text-emerald-800 font-semibold px-3 py-1 rounded-full">Uswah Hasanah</span>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-emerald-200 pt-3">
+                            <h4 class="text-sm font-bold text-emerald-900 mb-1.5">Bacaan Rujukan</h4>
+                            <ul class="list-disc list-inside text-xs sm:text-sm text-emerald-950 space-y-1">
+                                <li>Al-Ghazali, <em>Ihya’ ‘Ulum al-Din</em> (pembahasan tentang sifat-sifat yang menyelamatkan dan yang membinasakan).</li>
+                                <li>Tafsir al-Tabari atau Ibn Katsir atas ayat-ayat yang dikutip di atas.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="mt-8 pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <button type="button" onclick="switchTab(1)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Kembali ke Identitas</span>
+                    </button>
+                    <button type="button" onclick="unlockNextStep(2)" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                        <span>Paham & Lanjut ke Kuis MCQ</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Autograded MCQ Quiz (10 Questions, Max 2 Attempts, Hidden Answer Key) -->
+        <section id="section-3" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-4 mb-6 flex-wrap gap-2">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Kuis Pilihan Ganda (Autograded)</h2>
+                        <p class="text-sm text-slate-600">10 Soal • Maksimal 2 Kali Percobaan • Kunci Jawaban Disembunyikan</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 block">Sisa Percobaan</span>
+                        <span id="attempts-left-badge" class="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">2 dari 2</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Score Result Box -->
+                <div id="quiz-result-box" class="hidden mb-6 p-4 rounded-lg bg-emerald-50 border border-emerald-300">
+                    <div class="flex items-center justify-between flex-wrap gap-3">
+                        <div>
+                            <h3 class="font-bold text-emerald-900">Hasil Evaluasi Kuis</h3>
+                            <p class="text-sm text-emerald-800 mt-1" id="quiz-score-text">Skor Anda: 0/100</p>
+                            <p class="text-xs text-emerald-700 mt-0.5" id="quiz-highest-text">Skor Tertinggi Disimpan: 0/100</p>
+                        </div>
+                        <button type="button" id="btn-retake-quiz" onclick="retakeQuiz()" class="hidden bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Coba Lagi Kuis</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MCQ Form -->
+                <form id="quiz-form" onsubmit="submitQuiz(event)" class="space-y-6">
+                    <!-- Soal 1 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">1. Akhlak yang diperintahkan dan dipuji oleh Al-Qur’an disebut...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q1" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Akhlak madzmumah</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q1" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Akhlak mahmudah</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q1" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Akhlak ‘aqliyah</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q1" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Akhlak ‘urfiyah</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 2 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">2. Ayat <span class="arabic-text px-1">وَكُونُوا مَعَ الصَّادِقِينَ</span> (QS. At-Taubah [9]: 119) menunjukkan pentingnya akhlak...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q2" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Amanah</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q2" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Sabar</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q2" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Shidq (jujur)</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q2" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Tawadhu’</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 3 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">3. Sifat yang menjadi lawan langsung dari tawadhu’ adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q3" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Kibr</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q3" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Hasad</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q3" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Bukhl</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q3" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Riya’</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 4 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">4. Perbuatan ibadah yang dilakukan agar dilihat dan dipuji orang disebut...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q4" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Ikhlas</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q4" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Ghibah</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q4" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Riya’</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q4" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Israf</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 5 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">5. Perbuatan menggunjing orang lain dengan menyebut keburukannya di belakang mereka dilarang dalam surah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q5" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Al-Hujurat [49]: 12</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q5" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Ibrahim [14]: 7</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q5" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Al-Baqarah [2]: 153</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q5" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. An-Nahl [16]: 90</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 6 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">6. Berdasarkan konsep jalan tengah (wasath), dermawan berada di antara dua sifat, yaitu...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q6" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Jujur dan dusta</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q6" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Sabar dan marah</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q6" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Sombong dan rendah hati</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q6" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Kikir dan boros</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 7 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">7. Mengapa riya’, hasad, dan kibr dianggap berpusat di hati?</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q7" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Karena sifat tersebut tidak berdampak pada perilaku</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q7" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Karena sifat tersebut bersumber dari kondisi batin yang tidak tampak oleh mata</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q7" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Karena sifat tersebut hanya dilakukan secara lisan</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q7" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Karena sifat tersebut tidak dilarang agama</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 8 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">8. Ayat yang menyebut bahwa Rasulullah ﷺ adalah teladan yang baik adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q8" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. QS. Al-Falaq [113]: 5</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q8" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. QS. Luqman [31]: 18</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q8" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. QS. Al-Hajj [22]: 30</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q8" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. QS. Al-Ahzab [33]: 21</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 9 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">9. Ketika ‘Aisyah ditanya tentang akhlak Nabi, beliau menjawab bahwa akhlak Nabi adalah...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q9" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Al-Qur’an</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q9" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Kesabaran</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q9" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Keadilan</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q9" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Kedermawanan</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Soal 10 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">10. Mengapa kajian akhlak dalam Al-Qur’an perlu memakai pendekatan tematik (maudhu’i)?</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q10" value="A" required class="text-emerald-600 focus:ring-emerald-500">
+                                <span>A. Karena Al-Qur’an hanya membahas akhlak dalam satu surah</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q10" value="B" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>B. Karena satu nilai akhlak sering diungkapkan dengan berbagai kata dan tersebar di banyak ayat</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q10" value="C" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>C. Karena akhlak tidak disebut dalam Al-Qur’an</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border border-slate-200 hover:bg-emerald-50 cursor-pointer">
+                                <input type="radio" name="q10" value="D" class="text-emerald-600 focus:ring-emerald-500">
+                                <span>D. Karena kata “khuluq” muncul dalam setiap ayat</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Navigation & Submit Buttons -->
+                    <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="switchTab(2)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Kembali ke Materi Tertulis</span>
+                        </button>
+
+                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                            <button type="submit" id="btn-submit-quiz" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-check-double"></i>
+                                <span>Kirim & Nilai Kuis</span>
+                            </button>
+                            <button type="button" id="btn-next-from-quiz" onclick="unlockNextStep(3)" class="hidden w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition items-center justify-center gap-2">
+                                <span>Lanjut ke Tugas Esai</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Essay Form with 300-Word Minimum Validation -->
+        <section id="section-4" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Tugas Esai Singkat • Pertemuan 3</span>
+                    <h2 class="text-2xl font-bold text-slate-800 mt-1">Analisis Akhlak Mahmudah, Madzmumah, dan Keteladanan Nabi ﷺ</h2>
+                    <div class="flex flex-wrap gap-3 text-xs text-slate-600 mt-2">
+                        <span class="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded"><strong>Panjang:</strong> 300–400 kata</span>
+                        <span class="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded"><strong>Bahasa:</strong> Indonesia, ditulis dengan kalimat sendiri</span>
+                    </div>
+                </div>
+
+                <!-- Essay Instructions & Rubric -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 text-sm">
+                    <div class="lg:col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-3">
+                        <div>
+                            <h3 class="font-bold text-slate-900 mb-1">Pertanyaan:</h3>
+                            <p class="text-slate-700 leading-relaxed">Pilih satu pasang akhlak mahmudah dan lawannya yang madzmumah (misalnya jujur dan dusta, tawadhu’ dan sombong, atau ikhlas dan riya’). Jelaskan makna keduanya, sebutkan satu ayat Al-Qur’an untuk masing-masing, dan berikan satu contoh penerapan atau pelanggarannya dalam kehidupan mahasiswa. Kaitkan juga dengan keteladanan Nabi ﷺ.</p>
+                        </div>
+
+                        <div class="border-t border-slate-200 pt-2">
+                            <h4 class="font-bold text-slate-900 mb-1">Ketentuan:</h4>
+                            <ul class="list-disc list-inside text-slate-700 space-y-1 pl-1">
+                                <li><strong>Panjang:</strong> 300–400 kata.</li>
+                                <li><strong>Bahasa:</strong> Indonesia, ditulis dengan kalimat sendiri.</li>
+                                <li><strong>Wajib memuat:</strong> satu ayat mahmudah, satu ayat madzmumah, satu contoh nyata, dan satu contoh keteladanan Nabi.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Rubric Box -->
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-emerald-900 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-clipboard-check text-emerald-700"></i>
+                                <span>Rubrik Penilaian (Skor 100)</span>
+                            </h3>
+                            <table class="w-full text-xs text-left border-collapse border border-emerald-300 bg-white">
+                                <thead class="bg-emerald-100 text-emerald-950 font-semibold">
+                                    <tr>
+                                        <th class="p-2 border border-emerald-300">Aspek</th>
+                                        <th class="p-2 border border-emerald-300 text-center">Bobot</th>
+                                        <th class="p-2 border border-emerald-300">Kriteria</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="p-2 border border-emerald-200 font-medium">Pemahaman konsep</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">30</td>
+                                        <td class="p-2 border border-emerald-200">Menjelaskan makna sepasang akhlak dengan tepat</td>
+                                    </tr>
+                                    <tr class="bg-emerald-50/40">
+                                        <td class="p-2 border border-emerald-200 font-medium">Dalil Al-Qur’an</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">25</td>
+                                        <td class="p-2 border border-emerald-200">Menyebut ayat yang relevan dengan nama surah dan nomor yang benar</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 border border-emerald-200 font-medium">Contoh kontekstual</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">20</td>
+                                        <td class="p-2 border border-emerald-200">Contoh nyata, relevan, dan masuk akal</td>
+                                    </tr>
+                                    <tr class="bg-emerald-50/40">
+                                        <td class="p-2 border border-emerald-200 font-medium">Keteladanan Nabi</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">15</td>
+                                        <td class="p-2 border border-emerald-200">Mengaitkan dengan sikap atau peristiwa dalam kehidupan Nabi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 border border-emerald-200 font-medium">Bahasa dan sistematika</td>
+                                        <td class="p-2 border border-emerald-200 text-center font-bold">10</td>
+                                        <td class="p-2 border border-emerald-200">Runtut, jelas, dan bebas dari plagiasi</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-[11px] text-emerald-800 mt-3 italic">Nama berkas PDF otomatis menggunakan Nama Lengkap mahasiswa.</p>
+                    </div>
+                </div>
+
+                <!-- Word Count Warning Box -->
+                <div id="essay-warning-box" class="mb-4 p-3 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base"></i>
+                    <span>Syarat Panjang Esai: <strong>300–400 kata</strong>. Tombol simpan akan aktif setelah minimal 300 kata terpenuhi.</span>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <label for="select-essay-topic" class="text-xs font-semibold text-slate-700">Pasangan Akhlak Pilihan:</label>
+                            <select id="select-essay-topic" onchange="syncReportData()" class="text-xs border border-slate-300 rounded px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                                <option value="Shidq (Jujur) dan Kidzb (Dusta)">Shidq (Jujur) dan Kidzb (Dusta)</option>
+                                <option value="Tawadhu’ (Rendah Hati) dan Kibr (Sombong)">Tawadhu’ (Rendah Hati) dan Kibr (Sombong)</option>
+                                <option value="Ikhlas dan Riya’ (Pamer)">Ikhlas dan Riya’ (Pamer)</option>
+                                <option value="Qana’ah / Syukur dan Hasad / Kufur Nikmat">Qana’ah / Syukur dan Hasad / Kufur Nikmat</option>
+                                <option value="Dermawan dan Bukhl (Kikir) / Israf (Boros)">Dermawan dan Bukhl (Kikir) / Israf (Boros)</option>
+                            </select>
+                        </div>
+                        <span id="essay-word-counter" class="text-xs font-bold text-amber-600">0 / 300–400 Kata</span>
+                    </div>
+
+                    <textarea id="input-essay" oninput="validateEssayWords()" rows="15" placeholder="Tuliskan esai Anda di sini dengan bahasa sendiri (300–400 kata)..." class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none text-slate-800 leading-relaxed text-sm"></textarea>
+
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
+                        <span id="essay-status-msg" class="text-xs text-rose-600 font-medium">Panjang esai belum mencapai 300 kata.</span>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="switchTab(3)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Kembali ke Kuis MCQ</span>
+                        </button>
+                        <button type="button" id="btn-submit-essay" disabled onclick="submitEssay()" class="w-full sm:w-auto bg-slate-300 text-slate-500 font-semibold px-6 py-3 rounded-lg shadow-none cursor-not-allowed transition flex items-center justify-center gap-2">
+                            <span>Simpan & Lanjut ke Laporan PDF</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: PDF Preview & Vector PDF Export -->
+        <section id="section-5" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="text-center max-w-xl mx-auto mb-6">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Unduh Laporan & Penyerahan</h2>
+                    <p class="text-sm text-slate-600 mt-1">Periksa pratinjau laporan di bawah ini, lalu klik <strong>Unduh Laporan PDF</strong>. Berkas PDF akan otomatis dinamai sesuai <strong>Nama Mahasiswa</strong>.</p>
+                </div>
+
+                <!-- On-Screen Visual Preview Card -->
+                <div class="bg-slate-100 p-4 sm:p-6 rounded-xl border border-slate-300 mb-6">
+                    <div class="max-w-3xl mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-slate-200 space-y-5">
+                        <!-- Header -->
+                        <div class="border-b-2 border-emerald-800 pb-4 flex flex-col sm:flex-row justify-between items-start gap-2">
+                            <div>
+                                <h3 class="text-lg font-bold text-emerald-900 uppercase">Laporan Lembar Kerja Mahasiswa</h3>
+                                <p class="text-xs text-slate-600 font-semibold">Mata Kuliah Akhlak Tasawuf — Pertemuan 3: Klasifikasi Akhlak dalam Al-Qur’an</p>
+                                <p class="text-xs text-slate-500">Prodi Ilmu Al-Qur'an dan Tafsir • UIN Salatiga</p>
+                            </div>
+                            <div class="sm:text-right text-xs text-slate-500">
+                                <p>Tanggal Submit:</p>
+                                <p class="font-semibold text-slate-700" id="preview-date">-</p>
+                            </div>
+                        </div>
+
+                        <!-- Identity -->
+                        <div>
+                            <h4 class="text-xs font-bold uppercase text-emerald-800 tracking-wider mb-2">Identitas Mahasiswa</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                                <div class="p-2.5 bg-slate-50 border border-slate-200 rounded">
+                                    <span class="text-slate-500 block">Nama Lengkap</span>
+                                    <span class="font-bold text-slate-800" id="preview-nama">-</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-50 border border-slate-200 rounded">
+                                    <span class="text-slate-500 block">Kelas</span>
+                                    <span class="font-bold text-slate-800" id="preview-kelas">-</span>
+                                </div>
+                                <div class="p-2.5 bg-slate-50 border border-slate-200 rounded">
+                                    <span class="text-slate-500 block">NIM</span>
+                                    <span class="font-bold text-slate-800" id="preview-nim">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quiz Score -->
+                        <div>
+                            <h4 class="text-xs font-bold uppercase text-emerald-800 tracking-wider mb-2">Hasil Evaluasi Kuis MCQ</h4>
+                            <div class="p-3 bg-emerald-50 border border-emerald-200 rounded text-xs flex justify-between items-center">
+                                <span class="text-emerald-950">Nilai Akhir Kuis Pilihan Ganda (Skor Tertinggi dari 10 Soal):</span>
+                                <span id="preview-quiz-score" class="font-bold text-sm text-emerald-900">0 / 100</span>
+                            </div>
+                        </div>
+
+                        <!-- Essay -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1.5">
+                                <h4 class="text-xs font-bold uppercase text-emerald-800 tracking-wider">Tugas Esai Singkat</h4>
+                                <span id="preview-essay-wordcount" class="text-xs font-semibold text-slate-500">0 kata</span>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-700 mb-2">Pasangan Akhlak Pilihan: <span id="preview-essay-topic" class="font-normal">-</span></p>
+                            <div class="p-4 border border-slate-200 rounded text-xs leading-relaxed text-slate-800 bg-slate-50 whitespace-pre-wrap max-h-80 overflow-y-auto" id="preview-essay-body">-</div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="border-t border-slate-200 pt-3 flex justify-between items-center text-[11px] text-slate-500">
+                            <span>Sistem Perkuliahan Digital Akhlak Tasawuf • UIN Salatiga</span>
+                            <span class="font-bold text-slate-700">Copyright © @ulfiputrasany</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action & Navigation Buttons -->
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
+                    <button type="button" onclick="switchTab(4)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Kembali ke Tugas Esai</span>
+                    </button>
+
+                    <button type="button" onclick="generateVectorPDF()" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-8 py-3.5 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-arrow-down"></i>
+                        <span>Unduh Laporan PDF</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Branding -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-4 text-center border-t border-slate-800">
+        <p>Copyright © @ulfiputrasany • Mata Kuliah Akhlak Tasawuf UIN Salatiga</p>
+    </footer>
+
+    <!-- Application Logic Javascript -->
+    <script>
+        const state = {
+            student: { nama: '', kelas: '', nim: '' },
+            completedSteps: [1],
+            currentStep: 1,
+            totalSteps: 5,
+            quizAttempts: 0,
+            maxAttempts: 2,
+            highestScore: 0,
+            quizAnswers: {
+                q1: 'B', q2: 'C', q3: 'A', q4: 'C', q5: 'A',
+                q6: 'D', q7: 'B', q8: 'D', q9: 'A', q10: 'B'
+            },
+            userEssay: '',
+            essayTopic: '',
+            submitDate: ''
+        };
+
+        // Tab Navigation
+        function switchTab(step) {
+            if (!state.completedSteps.includes(step)) return;
+
+            state.currentStep = step;
+            for (let i = 1; i <= state.totalSteps; i++) {
+                const sec = document.getElementById(`section-${i}`);
+                const tab = document.getElementById(`tab-${i}`);
+                
+                if (i === step) {
+                    sec.classList.remove('hidden');
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('text-slate-400', 'text-slate-700');
+                } else {
+                    sec.classList.add('hidden');
+                    tab.classList.remove('tab-active');
+                    if (state.completedSteps.includes(i)) {
+                        tab.classList.add('text-slate-700', 'hover:text-emerald-700', 'hover:bg-emerald-50/50', 'cursor-pointer');
+                        tab.classList.remove('text-slate-400');
+                    }
+                }
+            }
+
+            if (step === 5) {
+                syncReportData();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Unlock Next Step
+        function unlockNextStep(currentStep) {
+            const nextStep = currentStep + 1;
+            if (nextStep <= state.totalSteps && !state.completedSteps.includes(nextStep)) {
+                state.completedSteps.push(nextStep);
+            }
+
+            const nextTab = document.getElementById(`tab-${nextStep}`);
+            const nextNum = document.getElementById(`num-${nextStep}`);
+            if (nextTab) {
+                nextTab.classList.remove('step-locked', 'text-slate-400');
+                nextTab.classList.add('text-slate-700', 'hover:text-emerald-700', 'hover:bg-emerald-50/50', 'cursor-pointer');
+                nextNum.classList.remove('bg-slate-200', 'text-slate-600');
+                nextNum.classList.add('bg-emerald-100', 'text-emerald-800');
+            }
+
+            switchTab(nextStep);
+        }
+
+        // Sync Data to Preview
+        function syncReportData() {
+            const essayEl = document.getElementById('input-essay');
+            const topicEl = document.getElementById('select-essay-topic');
+            if (essayEl && topicEl) {
+                const text = essayEl.value.trim();
+                const words = text ? text.split(/\s+/).filter(word => word.length > 0) : [];
+                state.userEssay = text;
+                state.essayTopic = topicEl.value;
+                document.getElementById('preview-essay-topic').innerText = state.essayTopic;
+                document.getElementById('preview-essay-wordcount').innerText = `${words.length} kata`;
+                document.getElementById('preview-essay-body').innerText = text || '-';
+            }
+            document.getElementById('preview-quiz-score').innerText = `${state.highestScore} / 100`;
+        }
+
+        // Step 1: Submit Identity Gate
+        function submitIdentity(event) {
+            event.preventDefault();
+            const nama = document.getElementById('input-nama').value.trim();
+            const kelas = document.getElementById('input-kelas').value;
+            const nim = document.getElementById('input-nim').value.trim();
+
+            if (!nama || !kelas || !nim) {
+                alert('Mohon lengkapi seluruh data identitas.');
+                return;
+            }
+
+            state.student = { nama, kelas, nim };
+            state.submitDate = new Date().toLocaleDateString('id-ID', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            document.getElementById('badge-name').innerText = nama;
+            document.getElementById('badge-class').innerText = `Kelas ${kelas}`;
+            document.getElementById('badge-nim').innerText = nim;
+            document.getElementById('student-badge').classList.remove('hidden');
+
+            document.getElementById('preview-nama').innerText = nama;
+            document.getElementById('preview-kelas').innerText = `Kelas ${kelas}`;
+            document.getElementById('preview-nim').innerText = nim;
+            document.getElementById('preview-date').innerText = state.submitDate;
+
+            unlockNextStep(1);
+        }
+
+        // Step 3: Submit & Autograde MCQ Quiz
+        function submitQuiz(event) {
+            event.preventDefault();
+
+            if (state.quizAttempts >= state.maxAttempts) {
+                alert('Anda telah mencapai batas maksimal percobaan kuis (2 kali).');
+                return;
+            }
+
+            const formData = new FormData(document.getElementById('quiz-form'));
+            let correctCount = 0;
+
+            for (let [question, answer] of formData.entries()) {
+                if (state.quizAnswers[question] === answer) {
+                    correctCount++;
+                }
+            }
+
+            const currentScore = Math.round((correctCount / 10) * 100);
+            state.quizAttempts++;
+
+            if (currentScore > state.highestScore) {
+                state.highestScore = currentScore;
+            }
+
+            document.getElementById('quiz-result-box').classList.remove('hidden');
+            document.getElementById('quiz-score-text').innerHTML = `Percobaan ke-${state.quizAttempts}: <strong>${currentScore} / 100</strong> (${correctCount} dari 10 soal benar).`;
+            document.getElementById('quiz-highest-text').innerText = `Skor Tertinggi Disimpan: ${state.highestScore} / 100`;
+            document.getElementById('preview-quiz-score').innerText = `${state.highestScore} / 100`;
+
+            const attemptsLeft = state.maxAttempts - state.quizAttempts;
+            document.getElementById('attempts-left-badge').innerText = `${attemptsLeft} dari ${state.maxAttempts}`;
+
+            const btnSubmit = document.getElementById('btn-submit-quiz');
+            const btnNext = document.getElementById('btn-next-from-quiz');
+            const btnRetake = document.getElementById('btn-retake-quiz');
+
+            btnSubmit.classList.add('hidden');
+            btnNext.classList.remove('hidden');
+            btnNext.classList.add('flex');
+
+            if (attemptsLeft > 0) {
+                btnRetake.classList.remove('hidden');
+            } else {
+                btnRetake.classList.add('hidden');
+            }
+        }
+
+        // Retake MCQ Test
+        function retakeQuiz() {
+            if (state.quizAttempts >= state.maxAttempts) return;
+
+            document.getElementById('quiz-form').reset();
+            document.getElementById('quiz-result-box').classList.add('hidden');
+            document.getElementById('btn-submit-quiz').classList.remove('hidden');
+            document.getElementById('btn-next-from-quiz').classList.add('hidden');
+            document.getElementById('btn-next-from-quiz').classList.remove('flex');
+            window.scrollTo({ top: document.getElementById('section-3').offsetTop - 80, behavior: 'smooth' });
+        }
+
+        // Step 4: Live Essay Word Counter & 300-Word Minimum Validation
+        function validateEssayWords() {
+            const text = document.getElementById('input-essay').value.trim();
+            const words = text ? text.split(/\s+/).filter(word => word.length > 0) : [];
+            const count = words.length;
+
+            const counterEl = document.getElementById('essay-word-counter');
+            const statusMsg = document.getElementById('essay-status-msg');
+            const btnSubmit = document.getElementById('btn-submit-essay');
+            const warningBox = document.getElementById('essay-warning-box');
+
+            counterEl.innerText = `${count} / 300–400 Kata`;
+
+            if (count >= 300) {
+                counterEl.className = "font-bold text-emerald-700";
+                if (count <= 400) {
+                    statusMsg.innerText = "Panjang esai ideal (300–400 kata) dan siap disimpan!";
+                    statusMsg.className = "text-xs text-emerald-700 font-semibold";
+                } else {
+                    statusMsg.innerText = `Syarat minimal terpenuhi (${count} kata; sedikit melebihi batas anjuran 400 kata).`;
+                    statusMsg.className = "text-xs text-amber-700 font-semibold";
+                }
+                
+                btnSubmit.disabled = false;
+                btnSubmit.className = "w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2 cursor-pointer";
+                warningBox.classList.add('hidden');
+            } else {
+                counterEl.className = "font-bold text-amber-600";
+                statusMsg.innerText = `Panjang esai belum mencapai 300 kata (Kurang ${300 - count} kata).`;
+                statusMsg.className = "text-xs text-rose-600 font-medium";
+
+                btnSubmit.disabled = true;
+                btnSubmit.className = "w-full sm:w-auto bg-slate-300 text-slate-500 font-semibold px-6 py-3 rounded-lg shadow-none cursor-not-allowed transition flex items-center justify-center gap-2";
+                warningBox.classList.remove('hidden');
+            }
+        }
+
+        // Submit Essay
+        function submitEssay() {
+            syncReportData();
+            unlockNextStep(4);
+        }
+
+        // Normalisasi karakter agar aman dirender oleh font standar PDF
+        function cleanPdfText(str) {
+            if (!str) return '-';
+            return str
+                .replace(/[\u2018\u2019]/g, "'")
+                .replace(/[\u201C\u201D]/g, '"')
+                .replace(/[\u2013\u2014]/g, '-')
+                .replace(/\uFDFA/g, 'SAW')
+                .replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF]/g, '');
+        }
+
+        // Step 5: Direct Vector PDF Generation via jsPDF (Zero Canvas Clipping)
+        function generateVectorPDF() {
+            syncReportData();
+
+            if (!window.jspdf || !window.jspdf.jsPDF) {
+                alert('Pustaka PDF sedang dimuat. Pastikan koneksi internet aktif lalu coba kembali.');
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({
+                orientation: 'portrait',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            const leftMargin = 18;
+            const rightMargin = 192;
+            const contentWidth = rightMargin - leftMargin; // 174mm
+            let y = 16;
+
+            // --- HEADER DOKUMEN ---
+            doc.setFillColor(6, 95, 70); // Emerald 800
+            doc.rect(leftMargin, y, contentWidth, 2.5, 'F');
+            y += 8;
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(14);
+            doc.setTextColor(6, 78, 59);
+            doc.text('LAPORAN LEMBAR KERJA MAHASISWA', leftMargin, y);
+            y += 5.5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.setTextColor(51, 65, 85);
+            doc.text("Mata Kuliah Akhlak Tasawuf - Pertemuan 3: Klasifikasi Akhlak dalam Al-Qur'an", leftMargin, y);
+            y += 5;
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(8.5);
+            doc.setTextColor(100, 116, 139);
+            doc.text("Prodi Ilmu Al-Qur'an dan Tafsir - UIN Salatiga", leftMargin, y);
+            doc.text(`Tanggal: ${cleanPdfText(state.submitDate)}`, rightMargin, y, { align: 'right' });
+            y += 3.5;
+
+            doc.setDrawColor(6, 95, 70);
+            doc.setLineWidth(0.5);
+            doc.line(leftMargin, y, rightMargin, y);
+            y += 8;
+
+            // --- IDENTITAS MAHASISWA ---
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9.5);
+            doc.setTextColor(6, 95, 70);
+            doc.text('IDENTITAS MAHASISWA', leftMargin, y);
+            y += 3.5;
+
+            const rows = [
+                ['Nama Lengkap', cleanPdfText(state.student.nama)],
+                ['Kelas', `Kelas ${cleanPdfText(state.student.kelas)}`],
+                ['NIM', cleanPdfText(state.student.nim)]
+            ];
+
+            doc.setDrawColor(203, 213, 225);
+            doc.setLineWidth(0.3);
+            rows.forEach((row, idx) => {
+                const rowH = 7.5;
+                // Label Cell
+                doc.setFillColor(248, 250, 252);
+                doc.rect(leftMargin, y, 44, rowH, 'FD');
+                // Value Cell
+                doc.setFillColor(255, 255, 255);
+                doc.rect(leftMargin + 44, y, contentWidth - 44, rowH, 'FD');
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9);
+                doc.setTextColor(51, 65, 85);
+                doc.text(row[0], leftMargin + 3, y + 5);
+
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(15, 23, 42);
+                doc.text(row[1], leftMargin + 47, y + 5);
+                y += rowH;
+            });
+            y += 7;
+
+            // --- HASIL EVALUASI KUIS MCQ ---
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9.5);
+            doc.setTextColor(6, 95, 70);
+            doc.text('HASIL EVALUASI KUIS MCQ', leftMargin, y);
+            y += 3.5;
+
+            doc.setFillColor(236, 253, 245); // Emerald 50
+            doc.setDrawColor(167, 243, 208);
+            doc.rect(leftMargin, y, contentWidth, 11, 'FD');
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(6, 78, 59);
+            doc.text('Nilai Akhir Kuis Pilihan Ganda (Skor Tertinggi dari 10 Soal):', leftMargin + 3.5, y + 7);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(11);
+            doc.text(`${state.highestScore} / 100`, rightMargin - 3.5, y + 7, { align: 'right' });
+            y += 18;
+
+            // --- TUGAS ESAI SINGKAT ---
+            const rawEssay = state.userEssay || '';
+            const wordCount = rawEssay ? rawEssay.split(/\s+/).filter(w => w.length > 0).length : 0;
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9.5);
+            doc.setTextColor(6, 95, 70);
+            doc.text('TUGAS ESAI SINGKAT', leftMargin, y);
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(8.5);
+            doc.setTextColor(100, 116, 139);
+            doc.text(`${wordCount} Kata`, rightMargin, y, { align: 'right' });
+            y += 5;
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(9);
+            doc.setTextColor(51, 65, 85);
+            const topicText = `Pasangan Akhlak Pilihan: ${cleanPdfText(state.essayTopic)}`;
+            const wrappedTopic = doc.splitTextToSize(topicText, contentWidth);
+            doc.text(wrappedTopic, leftMargin, y);
+            y += (wrappedTopic.length * 4.5) + 3;
+
+            // Render isi esai baris demi baris dengan pagination otomatis
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9.5);
+            doc.setTextColor(30, 41, 59);
+
+            const cleanEssay = cleanPdfText(rawEssay);
+            const paragraphs = cleanEssay.split(/\r?\n/);
+            const essayTextWidth = contentWidth - 6;
+            const pageBottomLimit = 274;
+
+            paragraphs.forEach((para) => {
+                if (para.trim() === '') {
+                    y += 3.5;
+                    if (y > pageBottomLimit) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                    return;
+                }
+
+                const lines = doc.splitTextToSize(para, essayTextWidth);
+                lines.forEach((line) => {
+                    if (y > pageBottomLimit) {
+                        doc.addPage();
+                        y = 20;
+                    }
+                    // Garis aksen tipis di sisi kiri blok esai
+                    doc.setDrawColor(203, 213, 225);
+                    doc.setLineWidth(0.6);
+                    doc.line(leftMargin, y - 3.5, leftMargin, y + 1.5);
+
+                    doc.text(line, leftMargin + 4, y);
+                    y += 5.2;
+                });
+                y += 2;
+            });
+
+            // --- FOOTER PADA SETIAP HALAMAN (Tanpa Kolom Tanda Tangan) ---
+            const totalPages = doc.internal.getNumberOfPages();
+            for (let p = 1; p <= totalPages; p++) {
+                doc.setPage(p);
+                doc.setDrawColor(203, 213, 225);
+                doc.setLineWidth(0.3);
+                doc.line(leftMargin, 281, rightMargin, 281);
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(100, 116, 139);
+                doc.text(`Sistem Perkuliahan Digital Akhlak Tasawuf - UIN Salatiga (Hal. ${p} dari ${totalPages})`, leftMargin, 286);
+
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(51, 65, 85);
+                doc.text('Copyright © @ulfiputrasany', rightMargin, 286, { align: 'right' });
+            }
+
+            // Nama berkas PDF menggunakan Nama Mahasiswa (bukan NIM)
+            const safeStudentName = state.student.nama
+                .replace(/[^a-zA-Z0-9\s]/g, '')
+                .trim()
+                .replace(/\s+/g, '_') || 'Mahasiswa';
+
+            doc.save(`Laporan_Akhlak_Tasawuf_P3_${safeStudentName}.pdf`);
+        }
+    </script>
 </body>
 </html>
