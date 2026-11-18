@@ -8,8 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- html2pdf.js CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- jsPDF CDN (Vector PDF Generator - Crisp Text & Reliable Pagination) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -909,7 +909,7 @@ Awan gelap  ->  "akan hujan"  ->  "jemuran harus diangkat"  ->  tindakan mengang
                     <p class="text-sm text-slate-600 mt-1">Seluruh tahapan pembelajaran Pertemuan 3 telah diselesaikan. Unduh berkas PDF laporan Anda dan serahkan sebelum Pertemuan 4.</p>
                 </div>
 
-                <!-- Printable Area Target for html2pdf.js -->
+                <!-- Report Preview Box -->
                 <div class="bg-slate-100 p-4 sm:p-8 rounded-xl border border-slate-300 mb-6">
                     <div id="pdf-report-content" class="bg-white p-8 rounded shadow-sm text-slate-800 space-y-6">
                         <!-- PDF Header -->
@@ -1011,7 +1011,8 @@ Awan gelap  ->  "akan hujan"  ->  "jemuran harus diangkat"  ->  tindakan mengang
                 q5: 'C', q6: 'C', q7: 'B', q8: 'C'
             },
             userEssay: '',
-            essayTopic: ''
+            essayTopic: '',
+            submitDateText: ''
         };
 
         // Flexible Tab Navigation (Allows jumping back and forth across all unlocked tabs)
@@ -1063,7 +1064,7 @@ Awan gelap  ->  "akan hujan"  ->  "jemuran harus diangkat"  ->  tindakan mengang
             switchTab(nextStep);
         }
 
-        // Sync Latest Student Data, Quiz Score & Essay to PDF Preview
+        // Sync Latest Student Data, Quiz Score & Essay to Preview & State
         function syncReportData() {
             const essayEl = document.getElementById('input-essay');
             const topicEl = document.getElementById('select-essay-topic');
@@ -1076,6 +1077,12 @@ Awan gelap  ->  "akan hujan"  ->  "jemuran harus diangkat"  ->  tindakan mengang
                 document.getElementById('pdf-essay-wordcount').innerText = `${words.length} kata`;
                 document.getElementById('pdf-essay-body').innerText = text || '-';
             }
+            if (!state.submitDateText) {
+                state.submitDateText = new Date().toLocaleDateString('id-ID', {
+                    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                });
+            }
+            document.getElementById('pdf-date').innerText = state.submitDateText;
             document.getElementById('pdf-quiz-score').innerText = `${state.highestScore} / 100`;
         }
 
@@ -1092,8 +1099,11 @@ Awan gelap  ->  "akan hujan"  ->  "jemuran harus diangkat"  ->  tindakan mengang
             }
 
             state.student = { nama, kelas, nim };
+            state.submitDateText = new Date().toLocaleDateString('id-ID', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
 
-            // Update UI Badges & PDF fields
+            // Update UI Badges & PDF preview fields
             document.getElementById('badge-name').innerText = nama;
             document.getElementById('badge-class').innerText = `Kelas ${kelas}`;
             document.getElementById('badge-nim').innerText = nim;
@@ -1102,9 +1112,7 @@ Awan gelap  ->  "akan hujan"  ->  "jemuran harus diangkat"  ->  tindakan mengang
             document.getElementById('pdf-nama').innerText = nama;
             document.getElementById('pdf-kelas').innerText = `Kelas ${kelas}`;
             document.getElementById('pdf-nim').innerText = nim;
-            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('id-ID', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
+            document.getElementById('pdf-date').innerText = state.submitDateText;
 
             unlockNextStep(1);
         }
@@ -1214,19 +1222,262 @@ Awan gelap  ->  "akan hujan"  ->  "jemuran harus diangkat"  ->  tindakan mengang
             unlockNextStep(4);
         }
 
-        // Step 5: PDF Generation via html2pdf.js
+        // Sanitize text for standard PDF WinAnsi font encoding
+        function sanitizePdfText(str) {
+            if (!str) return '-';
+            return String(str)
+                .replace(/\r\n/g, '\n')
+                .replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF\u2013\u2014\u2018\u2019\u201C\u201D\u2022\u2026]/g, '');
+        }
+
+        // Step 5: Direct Vector PDF Generation via jsPDF (Crisp Text, Multi-Page Support)
         function downloadPDF() {
             syncReportData();
-            const element = document.getElementById('pdf-report-content');
-            const opt = {
-                margin:       0.5,
-                filename:     `Laporan_Semiotika_AlQuran_P3_${state.student.nim}_${state.student.nama.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
 
-            html2pdf().set(opt).from(element).save();
+            const JsPDFConstructor = (window.jspdf && window.jspdf.jsPDF) || window.jsPDF;
+            if (!JsPDFConstructor) {
+                alert('Library pembuat PDF belum termuat. Pastikan koneksi internet aktif lalu muat ulang halaman.');
+                return;
+            }
+
+            try {
+                const doc = new JsPDFConstructor({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const pageWidth = doc.internal.pageSize.getWidth();   // 210 mm
+                const pageHeight = doc.internal.pageSize.getHeight(); // 297 mm
+                const marginX = 18;
+                const marginTop = 18;
+                const footerStartY = 280;
+                const maxBottomY = footerStartY - 6;
+                const contentWidth = pageWidth - (marginX * 2); // 174 mm
+
+                let y = marginTop;
+
+                // --- HEADER ---
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(13.5);
+                doc.setTextColor(6, 78, 59); // #064e3b
+                doc.text('LAPORAN LEMBAR KERJA MAHASISWA', marginX, y);
+
+                // Submission Date (Right side)
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8);
+                doc.setTextColor(100, 116, 139); // #64748b
+                doc.text('Tanggal Submit:', pageWidth - marginX, y - 0.5, { align: 'right' });
+
+                y += 5;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9);
+                doc.setTextColor(71, 85, 105); // #475569
+                doc.text(sanitizePdfText("Mata Kuliah Semiotika Al-Qur'an — Pertemuan 3: Peirce I, Tanda Triadik"), marginX, y);
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.setTextColor(51, 65, 85); // #334155
+                doc.text(sanitizePdfText(state.submitDateText), pageWidth - marginX, y, { align: 'right' });
+
+                y += 4.5;
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(8.5);
+                doc.setTextColor(100, 116, 139);
+                doc.text(sanitizePdfText("Prodi Ilmu Al-Qur'an dan Tafsir • UIN Salatiga"), marginX, y);
+
+                y += 4;
+                doc.setDrawColor(6, 95, 70); // #065f46
+                doc.setLineWidth(0.7);
+                doc.line(marginX, y, pageWidth - marginX, y);
+                y += 8;
+
+                // --- SECTION 1: IDENTITAS MAHASISWA ---
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9);
+                doc.setTextColor(6, 95, 70);
+                doc.text('IDENTITAS MAHASISWA', marginX, y);
+                y += 2.5;
+
+                const rows = [
+                    ['Nama Lengkap', sanitizePdfText(state.student.nama)],
+                    ['Kelas', sanitizePdfText(`Kelas ${state.student.kelas}`)],
+                    ['NIM', sanitizePdfText(state.student.nim)]
+                ];
+                const labelColW = 45;
+                const valColW = contentWidth - labelColW;
+                const rowH = 7.5;
+
+                doc.setLineWidth(0.25);
+                doc.setDrawColor(203, 213, 225); // #cbd5e1
+
+                rows.forEach((row, idx) => {
+                    if (idx === 0) {
+                        doc.setFillColor(248, 250, 252); // #f8fafc
+                        doc.rect(marginX, y, contentWidth, rowH, 'FD');
+                    } else {
+                        doc.rect(marginX, y, contentWidth, rowH, 'D');
+                    }
+                    doc.line(marginX + labelColW, y, marginX + labelColW, y + rowH);
+
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(8.5);
+                    doc.setTextColor(51, 65, 85);
+                    doc.text(row[0], marginX + 3, y + 5);
+
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(30, 41, 59);
+                    const valLines = doc.splitTextToSize(row[1], valColW - 6);
+                    doc.text(valLines[0] || '-', marginX + labelColW + 3, y + 5);
+
+                    y += rowH;
+                });
+
+                y += 7;
+
+                // --- SECTION 2: HASIL EVALUASI KUIS MCQ ---
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9);
+                doc.setTextColor(6, 95, 70);
+                doc.text('HASIL EVALUASI KUIS MCQ', marginX, y);
+                y += 2.5;
+
+                const quizBoxH = 10;
+                doc.setFillColor(236, 253, 245); // #ecfdf5
+                doc.setDrawColor(167, 243, 208); // #a7f3d0
+                doc.setLineWidth(0.3);
+                doc.rect(marginX, y, contentWidth, quizBoxH, 'FD');
+
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9);
+                doc.setTextColor(30, 41, 59);
+                doc.text('Nilai Akhir Kuis Pilihan Ganda (Skor Tertinggi):', marginX + 3.5, y + 6.5);
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(10.5);
+                doc.setTextColor(6, 78, 59);
+                doc.text(`${state.highestScore} / 100`, pageWidth - marginX - 3.5, y + 6.5, { align: 'right' });
+
+                y += quizBoxH + 8;
+
+                // --- SECTION 3: TUGAS ESAI SINGKAT ---
+                const essayText = sanitizePdfText(state.userEssay);
+                const wordCount = essayText && essayText !== '-'
+                    ? essayText.split(/\s+/).filter(w => w.length > 0).length
+                    : 0;
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9);
+                doc.setTextColor(6, 95, 70);
+                doc.text('TUGAS ESAI SINGKAT (ANALISIS SEGITIGA PEIRCE)', marginX, y);
+
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8.5);
+                doc.setTextColor(100, 116, 139);
+                doc.text(`${wordCount} kata`, pageWidth - marginX, y, { align: 'right' });
+
+                y += 5;
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8.5);
+                doc.setTextColor(51, 65, 85);
+                const topicLabel = 'Objek Pilihan: ';
+                doc.text(topicLabel, marginX, y);
+                const topicLabelW = doc.getTextWidth(topicLabel);
+
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(30, 41, 59);
+                const topicLines = doc.splitTextToSize(sanitizePdfText(state.essayTopic), contentWidth - topicLabelW);
+                doc.text(topicLines, marginX + topicLabelW, y);
+                y += (topicLines.length * 4.5) + 2;
+
+                // Essay Body with Multi-Page Bordered Container
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9.5);
+                doc.setTextColor(30, 41, 59);
+
+                const boxPadX = 4;
+                const boxPadY = 4.5;
+                const lineHeight = 5.0;
+                const textInnerWidth = contentWidth - (boxPadX * 2);
+
+                const paragraphs = essayText.split('\n');
+                const wrappedLines = [];
+                paragraphs.forEach((para, pIdx) => {
+                    const trimmed = para.trim();
+                    if (!trimmed) {
+                        if (pIdx > 0 && pIdx < paragraphs.length - 1) {
+                            wrappedLines.push('');
+                        }
+                    } else {
+                        const lines = doc.splitTextToSize(trimmed, textInnerWidth);
+                        lines.forEach(l => wrappedLines.push(l));
+                        if (pIdx < paragraphs.length - 1) {
+                            wrappedLines.push('');
+                        }
+                    }
+                });
+
+                if (wrappedLines.length === 0) {
+                    wrappedLines.push('-');
+                }
+
+                let lineIdx = 0;
+                while (lineIdx < wrappedLines.length) {
+                    const availableH = maxBottomY - y - (boxPadY * 2);
+                    const linesPerChunk = Math.max(1, Math.floor(availableH / lineHeight));
+                    const chunk = wrappedLines.slice(lineIdx, lineIdx + linesPerChunk);
+                    const boxH = (chunk.length * lineHeight) + (boxPadY * 2);
+
+                    doc.setFillColor(248, 250, 252); // #f8fafc
+                    doc.setDrawColor(203, 213, 225); // #cbd5e1
+                    doc.setLineWidth(0.25);
+                    doc.rect(marginX, y, contentWidth, boxH, 'FD');
+
+                    let textY = y + boxPadY + 3.5;
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(9.5);
+                    doc.setTextColor(30, 41, 59);
+
+                    chunk.forEach(line => {
+                        if (line !== '') {
+                            doc.text(line, marginX + boxPadX, textY);
+                        }
+                        textY += lineHeight;
+                    });
+
+                    lineIdx += chunk.length;
+                    if (lineIdx < wrappedLines.length) {
+                        doc.addPage();
+                        y = marginTop;
+                    }
+                }
+
+                // --- FOOTER ON ALL PAGES ---
+                const totalPages = doc.internal.getNumberOfPages();
+                for (let p = 1; p <= totalPages; p++) {
+                    doc.setPage(p);
+                    doc.setDrawColor(226, 232, 240); // #e2e8f0
+                    doc.setLineWidth(0.25);
+                    doc.line(marginX, footerStartY, pageWidth - marginX, footerStartY);
+
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(7.5);
+                    doc.setTextColor(100, 116, 139);
+                    doc.text("Sistem Perkuliahan Digital Semiotika Al-Qur'an", marginX, footerStartY + 4.5);
+                    doc.text(`Halaman ${p} dari ${totalPages}`, pageWidth / 2, footerStartY + 4.5, { align: 'center' });
+
+                    doc.setFont('helvetica', 'bold');
+                    doc.setTextColor(51, 65, 85);
+                    doc.text('Copyright © @ulfiputrasany', pageWidth - marginX, footerStartY + 4.5, { align: 'right' });
+                }
+
+                const safeNim = (state.student.nim || 'NIM').replace(/[^a-zA-Z0-9_-]/g, '');
+                const safeNama = (state.student.nama || 'Mahasiswa').trim().replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_-]/g, '');
+                doc.save(`Laporan_Semiotika_AlQuran_P3_${safeNim}_${safeNama}.pdf`);
+            } catch (err) {
+                console.error('PDF generation error:', err);
+                alert('Terjadi kendala saat membuat PDF: ' + (err && err.message ? err.message : err));
+            }
         }
     </script>
 </body>
