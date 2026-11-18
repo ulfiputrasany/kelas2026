@@ -1,22 +1,894 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Studi Kitab Tafsir Klasik Pertengahan — Pertemuan 3</title>
-<style>
-  body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background:#f4f6f5; color:#12281F; margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh; }
-  .card { background:#fff; border-radius:16px; padding:48px 40px; max-width:480px; text-align:center; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
-  .tag { display:inline-block; background:#E8F1EC; color:#1F6F54; font-size:13px; font-weight:600; padding:4px 12px; border-radius:999px; margin-bottom:16px; }
-  h1 { font-size:22px; margin:0 0 8px; color:#0B3D2E; }
-  p { color:#5A6B63; font-size:15px; line-height:1.6; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Tafsir Klasik - Pertemuan 3: Tafsir At-Tabari</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .step-locked { opacity: 0.45; pointer-events: none; cursor: not-allowed; }
+        .tab-active { border-bottom: 3px solid #059669 !important; color: #059669 !important; font-weight: 700 !important; background-color: #ecfdf5; }
+        .arabic-text { font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif; font-size: 1.2rem; direction: rtl; }
+
+        /* Styling Khusus Dokumen PDF */
+        #pdf-report-content, #pdf-report-clone {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1e293b;
+            background-color: #ffffff;
+            line-height: 1.5;
+            overflow: visible !important;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+        .pdf-avoid-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #pdf-report-content, #pdf-report-content * { visibility: visible; }
+            #pdf-report-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .no-print { display: none !important; }
+        }
+    </style>
 </head>
-<body>
-  <div class="card">
-    <span class="tag">Pertemuan 3</span>
-    <h1>Studi Kitab Tafsir Klasik Pertengahan</h1>
-    <p>Materi untuk pertemuan ini sedang disiapkan. Silakan kembali lagi nanti.</p>
-  </div>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-emerald-800 text-white shadow-lg sticky top-0 z-50 no-print">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-200">Prodi Ilmu Al-Qur'an dan Tafsir</span>
+                <h1 class="text-xl sm:text-2xl font-bold">Studi Kitab Tafsir Klasik — Pertemuan 3</h1>
+                <p class="text-xs text-emerald-100">At-Tabari dan Jami’ al-Bayan ‘an Ta’wil Ay al-Qur’an</p>
+            </div>
+            <div id="student-badge" class="hidden bg-emerald-900/80 border border-emerald-600 rounded-lg px-3 py-1.5 text-right text-xs">
+                <p class="font-semibold text-emerald-100" id="badge-name">-</p>
+                <p class="text-emerald-300"><span id="badge-class">-</span> | NIM: <span id="badge-nim">-</span></p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Stepper -->
+    <nav class="bg-white border-b border-slate-200 shadow-sm sticky top-[72px] z-40 overflow-x-auto no-print">
+        <div class="max-w-6xl mx-auto flex justify-between min-w-[640px] px-4">
+            <button type="button" onclick="switchTab(1)" id="tab-1" class="tab-active py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent transition-colors cursor-pointer">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-xs font-bold" id="num-1">1</span> Identitas
+            </button>
+            <button type="button" onclick="switchTab(2)" id="tab-2" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-2">2</span> Materi Tertulis
+            </button>
+            <button type="button" onclick="switchTab(3)" id="tab-3" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-3">3</span> Kuis MCQ
+            </button>
+            <button type="button" onclick="switchTab(4)" id="tab-4" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-4">4</span> Tugas Esai
+            </button>
+            <button type="button" onclick="switchTab(5)" id="tab-5" class="step-locked py-3 px-4 text-sm font-medium flex items-center gap-2 border-b-2 border-transparent text-slate-400 transition-colors">
+                <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold" id="num-5">5</span> Laporan PDF
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto w-full px-4 py-8 flex-grow">
+
+        <!-- SECTION 1: Identitas -->
+        <section id="section-1" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+            <div class="max-w-md mx-auto">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Registrasi Mahasiswa</h2>
+                    <p class="text-slate-600 text-sm mt-1">Isi data diri lengkap sebelum memulai perkuliahan interaktif.</p>
+                </div>
+                <form id="form-identity" onsubmit="submitIdentity(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+                        <input type="text" id="input-nama" required placeholder="Contoh: Ahmad Fauzi" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Kelas</label>
+                        <select id="input-kelas" required class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                            <option value="">-- Pilih Kelas --</option>
+                            <option value="A">Kelas A</option>
+                            <option value="B">Kelas B</option>
+                            <option value="C">Kelas C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">NIM (Nomor Induk Mahasiswa)</label>
+                        <input type="text" id="input-nim" required placeholder="Contoh: 1012023001" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold py-3 rounded-lg shadow-md transition duration-200 flex items-center justify-center gap-2">
+                        <span>Buka Materi Perkuliahan</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Materi Tertulis (Dibagi 2 Part) -->
+        <section id="section-2" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                
+                <!-- Header Materi -->
+                <div class="border-b border-slate-200 pb-4 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Materi Tertulis • Pertemuan 3</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mt-1">At-Tabari dan Jami’ al-Bayan</h2>
+                    </div>
+                    <div id="materi-badge" class="bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-bold px-3 py-1.5 rounded-full">
+                        Bagian 1: Latar Belakang & Metode
+                    </div>
+                </div>
+
+                <!-- BAGIAN 1: Penulis dan Tafsirnya -->
+                <div id="materi-part-1" class="prose max-w-none text-slate-800 space-y-6 leading-relaxed text-sm sm:text-base">
+                    
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">1. Latar Belakang Penulis</h3>
+                        <p>Abu Ja’far Muhammad bin Jarir bin Yazid at-Tabari hidup di masa Abbasiyah, ketika Baghdad menjadi pusat ilmu. Pada masa itu kodifikasi hadis telah mapan, mazhab fikih mulai mengkristal, ilmu kalam berkembang pesat, dan terjadi ketegangan antara kelompok Mu’tazilah, ahli hadis, dan Hanabilah. Tabari tumbuh dan berkarya dalam iklim intelektual ini.</p>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg">
+                        <h3 class="text-lg font-bold text-slate-900 mb-3">2. Biografi Singkat</h3>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Kelahiran dan wafat:</strong> lahir 224 H (839 M) di Amul, Tabaristan, dan wafat 310 H (923 M) di Baghdad.</li>
+                            <li><strong>Masa belajar:</strong> menghafal Al-Qur’an sejak kecil dan mulai belajar sejak usia belia. Ia merantau ke Rayy, Basrah, Kufah, Baghdad, Syam, dan Mesir.</li>
+                            <li><strong>Guru:</strong> antara lain Muhammad bin Humaid ar-Razi, Abu Kuraib, Ibnu Waki’, dan Yunus bin Abd al-A’la di Mesir.</li>
+                            <li><strong>Bidang keilmuan:</strong> tafsir, hadis, fikih, sejarah, qiraat, dan bahasa. Mulanya ia bermazhab Syafi’i, kemudian berijtihad mandiri dan dikenal dengan mazhab Jaririyyah.</li>
+                            <li><strong>Karya:</strong> Tarikh al-Rusul wa al-Muluk, Jami’ al-Bayan, Tahdzib al-Atsar, dan Ikhtilaf al-Fuqaha’.</li>
+                            <li><strong>Akhir hayat:</strong> berselisih dengan sebagian kalangan Hanabilah di Baghdad. Ia dimakamkan di rumahnya karena situasi yang tegang.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">3. Latar Belakang Penulisan</h3>
+                        <p>Sebelum Tabari, tafsir umumnya masih berupa riwayat terpisah atau bagian dari kitab hadis. Karya tafsir yang menyeluruh dan tersusun mengikuti mushaf belum ada. Tabari ingin menghimpun penafsiran generasi salaf dalam satu karya yang utuh, lalu menimbang pendapat-pendapat itu secara ilmiah. Menurut riwayat, ia mendiktekan tafsir ini kepada murid-muridnya dalam beberapa tahun, sekitar akhir abad ke-3 H. Rencana awalnya sangat panjang, lalu diringkas karena murid-muridnya merasa terlalu berat untuk diikuti.</p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">4. Sistematika</h3>
+                        <ol class="list-decimal list-inside space-y-2">
+                            <li><strong>Muqaddimah:</strong> membahas keutamaan Al-Qur’an, turunnya dalam bahasa Arab, tujuh huruf (ahruf), kedudukan tafsir Nabi dan sahabat, larangan tafsir tanpa ilmu, serta pengertian ta’wil dan tafsir.</li>
+                            <li><strong>Penafsiran sesuai urutan mushaf:</strong> dari al-Fatihah sampai an-Nas.</li>
+                            <li><strong>Pola penyajian tiap kelompok ayat:</strong> penjelasan makna ayat (<em>al-qawl fi ta’wil qawlihi ta’ala</em>), riwayat sahabat dan tabi’in lengkap dengan sanad, perbedaan pendapat, dan tarjih disertai alasan.</li>
+                        </ol>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">5. Sumber Penafsiran</h3>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Al-Qur’an dan hadis Nabi.</li>
+                            <li>Riwayat sahabat (Ibnu Abbas, Ibnu Mas’ud, Ubay bin Ka’b, Ali) dan tabi’in (Mujahid, Qatadah, al-Hasan al-Basri, Sa’id bin Jubair, as-Suddi, ad-Dahhak).</li>
+                            <li>Bahasa Arab, termasuk syair Arab dan pendapat ahli nahwu Kufah dan Basrah.</li>
+                            <li>Qiraat.</li>
+                            <li>Ijma’ dan riwayat isra’iliyyat (lazimnya dengan sanad).</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 p-5 rounded-lg">
+                        <h3 class="text-lg font-bold text-blue-900 mb-2">6. Metode dan Corak</h3>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>Metode:</strong> tahlili (analitis, ayat demi ayat), dengan unsur muqaran karena ia membandingkan beragam pendapat sebelum men-tarjih.</li>
+                            <li><strong>Corak:</strong> tafsir bil-ma’tsur, yakni berbasis riwayat. Namun Tabari tidak sekadar menyalin: ia menggunakan nalar (ra’y) untuk menimbang riwayat lewat bahasa, qiraat, konteks ayat (siyaq), dan ijma’.</li>
+                            <li><strong>Kriteria tarjih:</strong> kekuatan riwayat, kesesuaian dengan kaidah bahasa, dukungan ijma’, dan keselarasan dengan makna lahir ayat.</li>
+                            <li><strong>Sikap teologis:</strong> relatif tidak sektarian dan sedikit memasukkan perdebatan kalam, meski tetap berada dalam kerangka Sunni.</li>
+                        </ul>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border border-emerald-300 p-4 rounded-lg bg-emerald-50">
+                            <h3 class="text-lg font-bold text-emerald-900 mb-2">7. Kelebihan</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm">
+                                <li>Tafsir tertua yang sampai kepada kita secara lengkap, sehingga menjadi rujukan induk (umm al-tafasir).</li>
+                                <li>Mengawetkan banyak riwayat salaf dengan sanad, sehingga memudahkan penelusuran.</li>
+                                <li>Tidak berhenti pada pengumpulan riwayat: ada tarjih beralasan.</li>
+                                <li>Kaya analisis bahasa dan qiraat.</li>
+                                <li>Para ulama memujinya (as-Suyuti, Ibnu Taimiyah).</li>
+                            </ul>
+                        </div>
+                        <div class="border border-rose-300 p-4 rounded-lg bg-rose-50">
+                            <h3 class="text-lg font-bold text-rose-900 mb-2">8. Kelemahan</h3>
+                            <ul class="list-disc list-inside space-y-1 text-sm">
+                                <li>Sangat panjang dan banyak pengulangan riwayat sehingga sulit dipakai pembaca pemula.</li>
+                                <li>Memuat riwayat lemah (da’if) bahkan sebagian isra’iliyyat tanpa kritik yang memadai.</li>
+                                <li>Kritik terhadap sanad dan matan tidak seketat metode ahli hadis belakangan.</li>
+                                <li>Pembahasan hukum (ahkam) kurang mendalam dibanding tafsir ahkam.</li>
+                                <li>Sebagian tarjihnya diperdebatkan dan strukturnya rumit.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">9. Catatan Edisi</h3>
+                        <p>Edisi yang banyak dipakai antara lain cetakan Bulaq (30 juz) dan edisi tahqiq Mahmud Syakir dan Ahmad Syakir (tidak lengkap, hanya sampai pertengahan surah Ibrahim), serta edisi Abdullah at-Turki (Hajr).</p>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="switchTab(1)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> <span>Kembali ke Identitas</span>
+                        </button>
+                        <button type="button" onclick="showMateriPart(2)" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                            <span>Lanjut ke Bagian 2 (Contoh Penafsiran)</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- BAGIAN 2: Contoh Penafsiran -->
+                <div id="materi-part-2" class="hidden prose max-w-none text-slate-800 space-y-6 leading-relaxed text-sm sm:text-base">
+                    
+                    <div class="bg-slate-50 border-l-4 border-slate-600 p-5 rounded-r-lg mb-6">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Contoh Penafsiran At-Tabari: Surah al-Fatihah Ayat 6-7</h3>
+                        <p>Untuk memahami cara kerja at-Tabari, kita akan membaca penafsirannya atas ayat berikut: <em>ihdina al-sirat al-mustaqim, sirat alladzina an’amta ‘alayhim ghayr al-maghdubi ‘alayhim wa la al-dallin</em> (Tunjukilah kami jalan yang lurus, yaitu jalan orang-orang yang telah Engkau beri nikmat, bukan jalan mereka yang dimurkai dan bukan pula jalan mereka yang sesat). Ayat ini dipilih karena memperlihatkan hampir seluruh unsur khas metode Tabari: penjelasan kebahasaan, pembahasan qiraat, pengumpulan riwayat, dan tarjih.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">Pola Pembukaan</h4>
+                        <p>Pada hampir setiap bagian tafsirnya, Tabari membuka dengan rumusan <em>al-qawl fi ta’wil qawlihi ta’ala</em>, yang berarti “pembahasan tentang penafsiran firman Allah Ta’ala”. Rumusan ini perlu diperhatikan karena berfungsi sebagai penanda struktur. Setiap kali ia muncul, pembaca mengetahui bahwa satu unit penafsiran baru dimulai, yaitu potongan ayat yang disebutkan sesudahnya.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">Langkah Pertama: Makna Kebahasaan</h4>
+                        <p>Tabari memulai dari makna kata. Kata <em>ihdina</em> ia jelaskan sebagai permohonan petunjuk dan taufik, yaitu permintaan agar seorang hamba diberi kemampuan untuk tetap berada di jalan yang benar. Penjelasan ini tidak berhenti pada terjemahan, tetapi dikaitkan dengan penggunaan bahasa Arab.</p>
+                        <p>Hal serupa berlaku untuk kata <em>sirat</em>. Tabari menerangkan bahwa orang Arab memakai kata ini untuk jalan yang jelas dan tidak bengkok, lalu memperkuat penjelasannya dengan syair Arab. Ia juga menyinggung bahwa kata ini memiliki beberapa variasi pelafalan, dan menegaskan bahwa variasi tersebut mengacu pada makna yang sama meskipun logat pengucapannya berbeda. Dari sini tampak bahwa bagi Tabari, penguasaan bahasa dan qiraat merupakan perangkat pertama yang harus dimiliki sebelum seseorang menafsirkan.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">Langkah Kedua: Riwayat para Penafsir Awal</h4>
+                        <p>Setelah makna kebahasaan jelas, Tabari beralih pada pertanyaan pokok: apa yang dimaksud dengan “jalan yang lurus”? Untuk menjawabnya, ia menghimpun riwayat dari para sahabat dan tabi’in lengkap dengan sanadnya. Riwayat-riwayat itu merumuskan jawabannya dengan cara berbeda. Ada yang menyebut Islam, ada yang menyebut Al-Qur’an, dan ada pula yang menyebut jalan Nabi bersama dua sahabat terdekatnya.</p>
+                        <p>Sekilas ketiga rumusan itu tampak berbeda. Namun Tabari menunjukkan bahwa perbedaannya hanya terletak pada ungkapan, sedangkan maknanya bertemu pada satu hakikat, yaitu agama yang dibawa oleh Nabi Muhammad. Atas dasar itu, ia menyimpulkan bahwa penafsiran yang paling tepat ialah bahwa sirat mustaqim adalah jalan terang menuju kebenaran, yakni agama Islam sebagaimana diajarkan Nabi.</p>
+                        <p>Ada pelajaran metodologis penting di sini. Tidak semua perbedaan riwayat merupakan perbedaan pendapat yang sebenarnya. Salah satu kecakapan Tabari adalah membedakan perbedaan ragam ungkapan atas makna yang sama (<em>ikhtilaf tanawwu’</em>) dari perbedaan yang benar-benar saling bertentangan. Banyak kesimpulan tarjihnya bertumpu pada kemampuan membaca ragam riwayat dengan cara ini.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">Langkah Ketiga: Ayat 7 dan Tiga Kelompok yang Disebutkan</h4>
+                        <p>Pada ayat berikutnya, Tabari menjelaskan <em>alladzina an’amta ‘alayhim</em> sebagai orang-orang yang dianugerahi nikmat berupa taufik untuk taat kepada Allah, yaitu para nabi, orang-orang yang jujur, para syuhada, dan orang-orang saleh. Penjelasan ini ia dasarkan pada ayat lain dalam surah an-Nisa’ yang menyebut kelompok-kelompok tersebut. Inilah contoh penerapan prinsip menafsirkan Al-Qur’an dengan Al-Qur’an.</p>
+                        <p>Mengenai <em>al-maghdub ‘alayhim</em> dan <em>al-dallin</em>, Tabari menyebutkan riwayat dari para sahabat dan tabi’in yang mengidentifikasi kelompok pertama dengan kaum Yahudi dan kelompok kedua dengan kaum Nasrani. Ia menguatkannya dengan hadis tentang ‘Adi bin Hatim yang diriwayatkan dengan sanad dari Nabi, dan ia menyatakan bahwa ia tidak mengetahui adanya perselisihan di antara para penafsir dalam hal ini.</p>
+                        <p>Perlu dicatat bahwa sebagian ulama dan pengkaji belakangan membaca identifikasi tersebut sebagai contoh yang paling jelas dari dua sifat yang lebih umum, bukan sebagai pembatasan makna pada dua kelompok tertentu. Sifat pertama adalah menolak kebenaran padahal telah mengetahuinya, sedangkan sifat kedua adalah tidak menemukan jalan kebenaran karena kesalahan dalam beragama. Perbedaan cara membaca ini menunjukkan bahwa tafsir klasik terus dibaca ulang dari zaman ke zaman.</p>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-200 p-4 rounded-lg">
+                        <h4 class="font-bold text-amber-900 mb-1">Rangkuman</h4>
+                        <p>Dari contoh singkat ini kita dapat menyimpulkan urutan kerja Tabari. Ia memulai dari makna bahasa dan variasi bacaan, kemudian menghimpun riwayat dengan sanad, lalu memilah perbedaan yang hakiki dari perbedaan yang sekadar redaksional, dan terakhir menetapkan pendapat yang ia pilih disertai alasannya. Kebiasaan menyebutkan alasan tarjih inilah yang membedakan Tabari dari sekadar penghimpun riwayat.</p>
+                    </div>
+
+                    <div class="border border-slate-300 p-4 rounded-lg">
+                        <h4 class="font-bold text-slate-900 mb-2">Pertanyaan untuk Didiskusikan</h4>
+                        <ol class="list-decimal list-inside space-y-1">
+                            <li>Mengapa Tabari memandang penguasaan bahasa Arab dan qiraat sebagai langkah awal sebelum menafsirkan?</li>
+                            <li>Apa perbedaan antara perbedaan ragam ungkapan dan perbedaan pendapat yang bertentangan, dan mengapa pembedaan ini penting dalam membaca riwayat tafsir?</li>
+                            <li>Bagaimana cara membaca identifikasi <em>al-maghdub</em> dan <em>al-dallin</em> secara riwayat, dan apa implikasinya jika dibaca sebagai sifat yang lebih umum?</li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="showMateriPart(1)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> <span>Kembali ke Bagian 1</span>
+                        </button>
+                        <button type="button" onclick="unlockNextStep(2)" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                            <span>Paham & Lanjut ke Kuis MCQ</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: Kuis MCQ -->
+        <section id="section-3" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-4 mb-6 flex-wrap gap-2">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-800">Kuis Pilihan Ganda (Autograded)</h2>
+                        <p class="text-sm text-slate-600">10 Soal • Maksimal 2 Kali Percobaan • Kunci Jawaban Disembunyikan</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 block">Sisa Percobaan</span>
+                        <span id="attempts-left-badge" class="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">2 dari 2</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Score Box -->
+                <div id="quiz-result-box" class="hidden mb-6 p-4 rounded-lg bg-emerald-50 border border-emerald-300">
+                    <div class="flex items-center justify-between flex-wrap gap-3">
+                        <div>
+                            <h3 class="font-bold text-emerald-900">Hasil Evaluasi Kuis</h3>
+                            <p class="text-sm text-emerald-800 mt-1" id="quiz-score-text">Skor Anda: 0/100</p>
+                            <p class="text-xs text-emerald-700 mt-0.5" id="quiz-highest-text">Skor Tertinggi Disimpan: 0/100</p>
+                        </div>
+                        <button type="button" id="btn-retake-quiz" onclick="retakeQuiz()" class="hidden bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-right"></i> <span>Coba Lagi Kuis</span>
+                        </button>
+                    </div>
+                </div>
+
+                <form id="quiz-form" onsubmit="submitQuiz(event)" class="space-y-6">
+                    
+                    <!-- Soal 1-10 -->
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">1. Kitab tafsir karya at-Tabari yang menjadi rujukan induk tafsir bil-ma’tsur berjudul ...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q1" value="A" required class="text-emerald-600"> <span>A. Mafatih al-Ghayb</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q1" value="B" class="text-emerald-600"> <span>B. Jami’ al-Bayan ‘an Ta’wil Ay al-Qur’an</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q1" value="C" class="text-emerald-600"> <span>C. Anwar al-Tanzil</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q1" value="D" class="text-emerald-600"> <span>D. al-Jami’ li Ahkam al-Qur’an</span></label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">2. At-Tabari lahir di Amul, Tabaristan, dan wafat di Baghdad pada tahun ...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q2" value="A" required class="text-emerald-600"> <span>A. 224 H</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q2" value="B" class="text-emerald-600"> <span>B. 283 H</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q2" value="C" class="text-emerald-600"> <span>C. 310 H</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q2" value="D" class="text-emerald-600"> <span>D. 774 H</span></label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">3. Salah satu alasan at-Tabari menulis tafsirnya adalah karena pada masanya ...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q3" value="A" required class="text-emerald-600"> <span>A. belum ada ulama yang menguasai bahasa Arab</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q3" value="B" class="text-emerald-600"> <span>B. belum ada karya tafsir menyeluruh yang tersusun mengikuti urutan mushaf</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q3" value="C" class="text-emerald-600"> <span>C. Al-Qur’an belum dibukukan dalam satu mushaf</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q3" value="D" class="text-emerald-600"> <span>D. tafsir hanya boleh ditulis oleh para penguasa</span></label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">4. Berdasarkan sumber penafsirannya, tafsir at-Tabari tergolong bercorak ...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q4" value="A" required class="text-emerald-600"> <span>A. tafsir bil-ra’y murni</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q4" value="B" class="text-emerald-600"> <span>B. tafsir isyari</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q4" value="C" class="text-emerald-600"> <span>C. tafsir bil-ma’tsur yang disertai penggunaan nalar dalam tarjih</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q4" value="D" class="text-emerald-600"> <span>D. tafsir ilmi</span></label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">5. Dilihat dari cara penyajiannya, metode tafsir at-Tabari adalah ...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q5" value="A" required class="text-emerald-600"> <span>A. maudhu’i</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q5" value="B" class="text-emerald-600"> <span>B. ijmali</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q5" value="C" class="text-emerald-600"> <span>C. tahlili, dengan unsur muqaran dalam menimbang pendapat</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q5" value="D" class="text-emerald-600"> <span>D. tahlili tanpa perbandingan pendapat</span></label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">6. Rumusan yang lazim digunakan at-Tabari untuk menandai dimulainya satu unit penafsiran adalah ...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q6" value="A" required class="text-emerald-600"> <span>A. al-qawl fi ta’wil qawlihi ta’ala</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q6" value="B" class="text-emerald-600"> <span>B. hadza ma ra’aytuhu</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q6" value="C" class="text-emerald-600"> <span>C. qala al-mufassirun</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q6" value="D" class="text-emerald-600"> <span>D. wa Allahu a’lam bi al-sawab</span></label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">7. Manakah yang bukan termasuk kriteria tarjih at-Tabari?</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q7" value="A" required class="text-emerald-600"> <span>A. Kekuatan riwayat</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q7" value="B" class="text-emerald-600"> <span>B. Kesesuaian dengan kaidah bahasa Arab</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q7" value="C" class="text-emerald-600"> <span>C. Dukungan ijma’</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q7" value="D" class="text-emerald-600"> <span>D. Kecocokan dengan doktrin mazhab kalam tertentu</span></label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">8. Ketika menemukan riwayat yang berbeda tentang makna sirat mustaqim, at-Tabari menilai bahwa perbedaan itu ...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q8" value="A" required class="text-emerald-600"> <span>A. saling bertentangan sehingga semuanya harus ditolak</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q8" value="B" class="text-emerald-600"> <span>B. hanya perbedaan ragam ungkapan yang bermuara pada satu hakikat</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q8" value="C" class="text-emerald-600"> <span>C. menunjukkan bahwa ayat tersebut tidak dapat ditafsirkan</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q8" value="D" class="text-emerald-600"> <span>D. harus diselesaikan dengan menunggu pendapat khalifah</span></label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">9. Berikut ini yang merupakan kelemahan tafsir at-Tabari menurut para pengkaji adalah ...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q9" value="A" required class="text-emerald-600"> <span>A. tidak menyebutkan sanad sama sekali</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q9" value="B" class="text-emerald-600"> <span>B. memuat riwayat lemah dan isra’iliyyat tanpa kritik memadai</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q9" value="C" class="text-emerald-600"> <span>C. tidak membahas qiraat dan bahasa Arab</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q9" value="D" class="text-emerald-600"> <span>D. hanya menafsirkan separuh dari Al-Qur’an</span></label>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg border border-slate-200 bg-slate-50">
+                        <p class="font-semibold text-slate-800 text-sm mb-3">10. Pada bagian muqaddimah, at-Tabari antara lain membahas ...</p>
+                        <div class="space-y-2 text-sm">
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q10" value="A" required class="text-emerald-600"> <span>A. biografi para khalifah Abbasiyah</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q10" value="B" class="text-emerald-600"> <span>B. daftar lengkap hukum fikih Syafi’i</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q10" value="C" class="text-emerald-600"> <span>C. keutamaan Al-Qur’an, tujuh huruf, serta pengertian tafsir dan ta’wil</span></label>
+                            <label class="flex items-center gap-2 p-2 bg-white rounded border hover:bg-emerald-50 cursor-pointer"><input type="radio" name="q10" value="D" class="text-emerald-600"> <span>D. perbandingan tafsir Sunni dan Syi’ah</span></label>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="switchTab(2)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> <span>Kembali ke Materi</span>
+                        </button>
+                        
+                        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                            <button type="submit" id="btn-submit-quiz" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-check-double"></i> <span>Kirim & Nilai Kuis</span>
+                            </button>
+                            <button type="button" id="btn-next-from-quiz" onclick="unlockNextStep(3)" class="hidden w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition items-center justify-center gap-2">
+                                <span>Lanjut ke Tugas Esai</span> <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Tugas Esai -->
+        <section id="section-4" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="border-b border-slate-200 pb-4 mb-6">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700">Tugas Esai Singkat • Pertemuan 3</span>
+                    <h2 class="text-2xl font-bold text-slate-800 mt-1">Relevansi Tafsir At-Tabari Masa Kini</h2>
+                    <div class="flex flex-wrap gap-3 text-xs text-slate-600 mt-2">
+                        <span class="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded"><strong>Panjang:</strong> 300–400 kata</span>
+                        <span class="bg-slate-100 border border-slate-200 px-2.5 py-1 rounded"><strong>Bahasa:</strong> Indonesia</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6 text-sm">
+                    <div class="lg:col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-4 space-y-3">
+                        <div>
+                            <h3 class="font-bold text-slate-900 mb-1">Pertanyaan:</h3>
+                            <p class="text-slate-700 leading-relaxed">Tafsir at-Tabari ditulis lebih dari seribu tahun yang lalu. Menurut Anda, apakah kitab ini masih relevan untuk dibaca dan dipelajari pada masa kini? Jelaskan pendapat Anda dengan bahasa sendiri, dan berikan <strong>satu contoh pelajaran</strong> dari cara kerja at-Tabari (misalnya kebiasaannya menyebut alasan tarjih atau menyikapi perbedaan pendapat) yang berguna hari ini.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-4 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-emerald-900 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-clipboard-check text-emerald-700"></i>
+                                <span>Rubrik (Skor 100)</span>
+                            </h3>
+                            <ul class="text-xs text-emerald-900 space-y-1">
+                                <li><strong>40:</strong> Pendapat jelas & alasan kuat.</li>
+                                <li><strong>35:</strong> Contoh pelajaran kerja At-Tabari yang relevan.</li>
+                                <li><strong>25:</strong> Kejelasan bahasa & kesesuaian batas kata.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="essay-warning-box" class="mb-4 p-3 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base"></i>
+                    <span>Syarat Panjang Esai: <strong>300–400 kata</strong>. Tombol simpan akan aktif setelah terpenuhi.</span>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <label for="select-essay-topic" class="text-xs font-semibold text-slate-700">Fokus Esai:</label>
+                            <select id="select-essay-topic" onchange="syncReportData()" class="text-xs border border-slate-300 rounded px-2.5 py-1.5 bg-white focus:ring-2 focus:ring-emerald-600 focus:outline-none">
+                                <option value="Relevansi Tafsir At-Tabari & Pelajaran Tarjih">Relevansi Tafsir At-Tabari & Pelajaran Tarjih</option>
+                                <option value="Analisis Kritis Riwayat dalam Tafsir">Analisis Kritis Riwayat dalam Tafsir</option>
+                            </select>
+                        </div>
+                        <span id="essay-word-counter" class="text-xs font-bold text-amber-600">0 / 300–400 Kata</span>
+                    </div>
+
+                    <textarea id="input-essay" oninput="validateEssayWords()" rows="12" placeholder="Tuliskan esai Anda di sini (min. 300 kata)..." class="w-full p-4 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-600 focus:outline-none text-slate-800 leading-relaxed text-sm"></textarea>
+
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
+                        <span id="essay-status-msg" class="text-xs text-rose-600 font-medium">Panjang esai belum mencapai 300 kata.</span>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <button type="button" onclick="switchTab(3)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3 rounded-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i> <span>Kembali ke Kuis</span>
+                        </button>
+                        <button type="button" id="btn-submit-essay" disabled onclick="submitEssay()" class="w-full sm:w-auto bg-slate-300 text-slate-500 font-semibold px-6 py-3 rounded-lg shadow-none cursor-not-allowed transition flex items-center justify-center gap-2">
+                            <span>Simpan & Lanjut ke Laporan PDF</span> <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Ekspor PDF -->
+        <section id="section-5" class="hidden space-y-6">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
+                <div class="text-center max-w-xl mx-auto mb-6 no-print">
+                    <div class="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">Unduh Laporan PDF</h2>
+                    <p class="text-sm text-slate-600 mt-1">Laporan akan diekspor dengan format Nama Anda pada fail.</p>
+                </div>
+
+                <div class="bg-slate-100 p-3 sm:p-6 rounded-xl border border-slate-300 mb-6 overflow-x-auto">
+                    <div id="pdf-report-content" style="max-width: 720px; margin: 0 auto; padding: 28px; background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 6px; color: #1e293b;">
+                        
+                        <table class="pdf-avoid-break" style="width: 100%; border-collapse: collapse; border-bottom: 2px solid #065f46; margin-bottom: 18px;">
+                            <tr>
+                                <td style="padding-bottom: 12px; vertical-align: top;">
+                                    <div style="font-size: 16px; font-weight: bold; color: #064e3b; text-transform: uppercase;">Lembar Kerja Mahasiswa</div>
+                                    <div style="font-size: 12px; font-weight: bold; color: #475569; margin-top: 3px;">Mata Kuliah Studi Kitab Tafsir Klasik — Pertemuan 3</div>
+                                    <div style="font-size: 11px; color: #64748b; margin-top: 2px;">At-Tabari dan Jami’ al-Bayan</div>
+                                </td>
+                                <td style="padding-bottom: 12px; vertical-align: top; text-align: right; font-size: 11px; color: #64748b; width: 32%;">
+                                    <div>Tanggal Penyelesaian:</div>
+                                    <div style="font-weight: bold; color: #334155; margin-top: 2px;" id="pdf-date">-</div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="pdf-avoid-break" style="margin-bottom: 18px;">
+                            <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: #065f46; margin-bottom: 6px;">Identitas Mahasiswa</div>
+                            <table style="width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid #cbd5e1;">
+                                <tr style="background-color: #f8fafc;">
+                                    <td style="padding: 8px 10px; font-weight: bold; width: 28%; border: 1px solid #cbd5e1;">Nama Lengkap</td>
+                                    <td style="padding: 8px 10px; color: #0f172a; border: 1px solid #cbd5e1;" id="pdf-nama">-</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px 10px; font-weight: bold; border: 1px solid #cbd5e1;">Kelas</td>
+                                    <td style="padding: 8px 10px; color: #0f172a; border: 1px solid #cbd5e1;" id="pdf-kelas">-</td>
+                                </tr>
+                                <tr style="background-color: #f8fafc;">
+                                    <td style="padding: 8px 10px; font-weight: bold; border: 1px solid #cbd5e1;">NIM</td>
+                                    <td style="padding: 8px 10px; color: #0f172a; border: 1px solid #cbd5e1;" id="pdf-nim">-</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="pdf-avoid-break" style="margin-bottom: 18px;">
+                            <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: #065f46; margin-bottom: 6px;">Hasil Evaluasi Kuis MCQ</div>
+                            <table style="width: 100%; border-collapse: collapse; font-size: 12px; background-color: #ecfdf5; border: 1px solid #a7f3d0;">
+                                <tr>
+                                    <td style="padding: 10px 12px; color: #064e3b;">Nilai Kuis (10 Soal):</td>
+                                    <td style="padding: 10px 12px; text-align: right; font-weight: bold; font-size: 14px; color: #064e3b;" id="pdf-quiz-score">0 / 100</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div style="margin-bottom: 18px;">
+                            <table class="pdf-avoid-break" style="width: 100%; border-collapse: collapse; margin-bottom: 6px;">
+                                <tr>
+                                    <td style="font-size: 11px; font-weight: bold; text-transform: uppercase; color: #065f46;">Tugas Esai Singkat</td>
+                                    <td style="text-align: right; font-size: 11px; font-weight: bold; color: #64748b;" id="pdf-essay-wordcount">0 kata</td>
+                                </tr>
+                            </table>
+                            <div class="pdf-avoid-break" style="font-size: 12px; font-weight: bold; color: #334155; margin-bottom: 8px;">Fokus: <span id="pdf-essay-topic" style="font-weight: normal;">-</span></div>
+                            <div style="padding: 14px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 12px; line-height: 1.65; color: #1e293b; background-color: #f8fafc; white-space: pre-wrap; word-wrap: break-word; text-align: justify;" id="pdf-essay-body">-</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2 no-print">
+                    <button type="button" onclick="switchTab(4)" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-3.5 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> <span>Kembali ke Esai</span>
+                    </button>
+                    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                        <button type="button" onclick="window.print()" class="w-full sm:w-auto bg-slate-700 hover:bg-slate-800 text-white font-semibold px-5 py-3.5 rounded-lg shadow transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-print"></i> <span>Cetak Alternatif</span>
+                        </button>
+                        <button type="button" id="btn-download-pdf" onclick="downloadPDF()" class="w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-7 py-3.5 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-file-arrow-down"></i> <span id="btn-download-pdf-text">Unduh Laporan PDF</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const state = {
+            student: { nama: '', kelas: '', nim: '' },
+            completedSteps: [1],
+            currentStep: 1,
+            totalSteps: 5,
+            quizAttempts: 0,
+            maxAttempts: 2,
+            highestScore: 0,
+            quizAnswers: {
+                q1: 'B', q2: 'C', q3: 'B', q4: 'C', q5: 'C',
+                q6: 'A', q7: 'D', q8: 'B', q9: 'B', q10: 'C'
+            },
+            userEssay: '',
+            essayTopic: ''
+        };
+
+        // Navigasi Antar Tab
+        function switchTab(step) {
+            if (!state.completedSteps.includes(step)) return;
+            state.currentStep = step;
+            for (let i = 1; i <= state.totalSteps; i++) {
+                const sec = document.getElementById(`section-${i}`);
+                const tab = document.getElementById(`tab-${i}`);
+                if (i === step) {
+                    sec.classList.remove('hidden');
+                    tab.classList.add('tab-active');
+                    tab.classList.remove('text-slate-400', 'text-slate-700');
+                } else {
+                    sec.classList.add('hidden');
+                    tab.classList.remove('tab-active');
+                    if (state.completedSteps.includes(i)) {
+                        tab.classList.add('text-slate-700', 'hover:text-emerald-700', 'hover:bg-emerald-50/50', 'cursor-pointer');
+                        tab.classList.remove('text-slate-400');
+                    }
+                }
+            }
+            if (step === 5) syncReportData();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function unlockNextStep(currentStep) {
+            const nextStep = currentStep + 1;
+            if (nextStep <= state.totalSteps && !state.completedSteps.includes(nextStep)) {
+                state.completedSteps.push(nextStep);
+            }
+            const nextTab = document.getElementById(`tab-${nextStep}`);
+            const nextNum = document.getElementById(`num-${nextStep}`);
+            if (nextTab) {
+                nextTab.classList.remove('step-locked', 'text-slate-400');
+                nextTab.classList.add('text-slate-700', 'hover:text-emerald-700', 'hover:bg-emerald-50/50', 'cursor-pointer');
+                nextNum.classList.remove('bg-slate-200', 'text-slate-600');
+                nextNum.classList.add('bg-emerald-100', 'text-emerald-800');
+            }
+            switchTab(nextStep);
+        }
+
+        // Beralih Antara Bagian 1 & 2 di Materi Tertulis
+        function showMateriPart(partNumber) {
+            const part1 = document.getElementById('materi-part-1');
+            const part2 = document.getElementById('materi-part-2');
+            const badge = document.getElementById('materi-badge');
+
+            if(partNumber === 1) {
+                part1.classList.remove('hidden');
+                part2.classList.add('hidden');
+                badge.innerText = "Bagian 1: Latar Belakang & Metode";
+            } else {
+                part1.classList.add('hidden');
+                part2.classList.remove('hidden');
+                badge.innerText = "Bagian 2: Contoh Penafsiran";
+            }
+            window.scrollTo({ top: document.getElementById('section-2').offsetTop - 20, behavior: 'smooth' });
+        }
+
+        function syncReportData() {
+            const essayEl = document.getElementById('input-essay');
+            const topicEl = document.getElementById('select-essay-topic');
+            if (essayEl && topicEl) {
+                const text = essayEl.value.trim();
+                const words = text ? text.split(/\s+/).filter(word => word.length > 0) : [];
+                state.userEssay = text;
+                state.essayTopic = topicEl.value;
+                document.getElementById('pdf-essay-topic').innerText = state.essayTopic;
+                document.getElementById('pdf-essay-wordcount').innerText = `${words.length} kata`;
+                document.getElementById('pdf-essay-body').innerText = text || '-';
+            }
+            document.getElementById('pdf-quiz-score').innerText = `${state.highestScore} / 100`;
+        }
+
+        function submitIdentity(event) {
+            event.preventDefault();
+            const nama = document.getElementById('input-nama').value.trim();
+            const kelas = document.getElementById('input-kelas').value;
+            const nim = document.getElementById('input-nim').value.trim();
+
+            if (!nama || !kelas || !nim) {
+                alert('Mohon lengkapi seluruh data identitas.');
+                return;
+            }
+
+            state.student = { nama, kelas, nim };
+
+            document.getElementById('badge-name').innerText = nama;
+            document.getElementById('badge-class').innerText = `Kelas ${kelas}`;
+            document.getElementById('badge-nim').innerText = nim;
+            document.getElementById('student-badge').classList.remove('hidden');
+
+            document.getElementById('pdf-nama').innerText = nama;
+            document.getElementById('pdf-kelas').innerText = `Kelas ${kelas}`;
+            document.getElementById('pdf-nim').innerText = nim;
+            document.getElementById('pdf-date').innerText = new Date().toLocaleDateString('id-ID', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            unlockNextStep(1);
+        }
+
+        function submitQuiz(event) {
+            event.preventDefault();
+            if (state.quizAttempts >= state.maxAttempts) {
+                alert('Anda telah mencapai batas maksimal percobaan.');
+                return;
+            }
+            const formData = new FormData(document.getElementById('quiz-form'));
+            let correctCount = 0;
+            for (let [question, answer] of formData.entries()) {
+                if (state.quizAnswers[question] === answer) correctCount++;
+            }
+            const currentScore = Math.round((correctCount / 10) * 100);
+            state.quizAttempts++;
+            if (currentScore > state.highestScore) state.highestScore = currentScore;
+
+            document.getElementById('quiz-result-box').classList.remove('hidden');
+            document.getElementById('quiz-score-text').innerHTML = `Percobaan ke-${state.quizAttempts}: <strong>${currentScore} / 100</strong>.`;
+            document.getElementById('quiz-highest-text').innerText = `Skor Tertinggi Disimpan: ${state.highestScore} / 100`;
+            
+            const attemptsLeft = state.maxAttempts - state.quizAttempts;
+            document.getElementById('attempts-left-badge').innerText = `${attemptsLeft} dari ${state.maxAttempts}`;
+
+            document.getElementById('btn-submit-quiz').classList.add('hidden');
+            document.getElementById('btn-next-from-quiz').classList.remove('hidden');
+            document.getElementById('btn-next-from-quiz').classList.add('flex');
+            
+            if (attemptsLeft > 0) {
+                document.getElementById('btn-retake-quiz').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-retake-quiz').classList.add('hidden');
+            }
+        }
+
+        function retakeQuiz() {
+            if (state.quizAttempts >= state.maxAttempts) return;
+            document.getElementById('quiz-form').reset();
+            document.getElementById('quiz-result-box').classList.add('hidden');
+            document.getElementById('btn-submit-quiz').classList.remove('hidden');
+            document.getElementById('btn-next-from-quiz').classList.add('hidden');
+            document.getElementById('btn-next-from-quiz').classList.remove('flex');
+        }
+
+        function validateEssayWords() {
+            const text = document.getElementById('input-essay').value.trim();
+            const words = text ? text.split(/\s+/).filter(word => word.length > 0) : [];
+            const count = words.length;
+
+            const counterEl = document.getElementById('essay-word-counter');
+            const statusMsg = document.getElementById('essay-status-msg');
+            const btnSubmit = document.getElementById('btn-submit-essay');
+            const warningBox = document.getElementById('essay-warning-box');
+
+            counterEl.innerText = `${count} / 300–400 Kata`;
+
+            if (count >= 300) {
+                counterEl.className = "font-bold text-emerald-700";
+                statusMsg.innerText = count <= 400 ? "Panjang esai ideal dan siap disimpan!" : "Syarat minimal terpenuhi (sedikit melebihi anjuran).";
+                statusMsg.className = count <= 400 ? "text-xs text-emerald-700 font-semibold" : "text-xs text-amber-700 font-semibold";
+                
+                btnSubmit.disabled = false;
+                btnSubmit.className = "w-full sm:w-auto bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2 cursor-pointer";
+                warningBox.classList.add('hidden');
+            } else {
+                counterEl.className = "font-bold text-amber-600";
+                statusMsg.innerText = `Panjang belum mencapai 300 kata (Kurang ${300 - count} kata).`;
+                statusMsg.className = "text-xs text-rose-600 font-medium";
+
+                btnSubmit.disabled = true;
+                btnSubmit.className = "w-full sm:w-auto bg-slate-300 text-slate-500 font-semibold px-6 py-3 rounded-lg shadow-none cursor-not-allowed transition flex items-center justify-center gap-2";
+                warningBox.classList.remove('hidden');
+            }
+        }
+
+        function submitEssay() {
+            syncReportData();
+            unlockNextStep(4);
+        }
+
+        async function downloadPDF() {
+            syncReportData();
+            const sourceElement = document.getElementById('pdf-report-content');
+            const btn = document.getElementById('btn-download-pdf');
+            const btnText = document.getElementById('btn-download-pdf-text');
+
+            if (typeof html2pdf === 'undefined') {
+                alert('Pustaka PDF gagal dimuat. Gunakan tombol "Cetak Alternatif" di sebelahnya.');
+                window.print();
+                return;
+            }
+
+            const formattedName = state.student.nama.replace(/[^a-zA-Z0-9\s]/g, '').trim().replace(/\s+/g, '_') || 'Mahasiswa';
+            const filename = `Laporan_Tafsir_AtTabari_P3_${formattedName}.pdf`;
+
+            btn.disabled = true;
+            btnText.innerText = 'Memproses PDF...';
+
+            const savedScrollY = window.scrollY;
+            window.scrollTo(0, 0);
+
+            // Overlay bersih di koordinat (0,0) agar html2canvas menangkap dokumen tanpa pergeseran scroll/margin
+            const printOverlay = document.createElement('div');
+            printOverlay.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; min-height: 100vh; background-color: #ffffff; z-index: 99999; padding: 0; margin: 0;';
+
+            const clone = sourceElement.cloneNode(true);
+            clone.id = 'pdf-report-clone';
+            clone.style.width = '680px';
+            clone.style.maxWidth = '680px';
+            clone.style.margin = '0';
+            clone.style.padding = '24px';
+            clone.style.border = 'none';
+            clone.style.boxShadow = 'none';
+            clone.style.backgroundColor = '#ffffff';
+
+            printOverlay.appendChild(clone);
+            document.body.appendChild(printOverlay);
+
+            await document.fonts.ready;
+            await new Promise(resolve => setTimeout(resolve, 150));
+
+            const opt = {
+                margin:       [12, 12, 12, 12],
+                filename:     filename,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    scrollX: 0,
+                    scrollY: 0,
+                    x: 0,
+                    y: 0,
+                    width: 680,
+                    windowWidth: 680
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['css', 'legacy'], avoid: '.pdf-avoid-break' }
+            };
+
+            try {
+                await html2pdf().set(opt).from(clone).save();
+            } catch (err) {
+                console.error('PDF Error:', err);
+                alert('Terjadi kendala saat membuat PDF otomatis. Membuka dialog cetak alternatif.');
+                window.print();
+            } finally {
+                if (document.body.contains(printOverlay)) {
+                    document.body.removeChild(printOverlay);
+                }
+                window.scrollTo(0, savedScrollY);
+                btn.disabled = false;
+                btnText.innerText = 'Unduh Laporan PDF';
+            }
+        }
+    </script>
 </body>
 </html>
